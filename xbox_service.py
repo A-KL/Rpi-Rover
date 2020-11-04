@@ -67,7 +67,12 @@ print("Xbox Controller ready")
 try:
     while not joy.Back():
         x0, y0 = joy.leftStick()
+        y0 = joy.rightTrigger() - joy.leftTrigger() 
+
         x1, y1 = joy.rightStick()
+
+        x1 = - x1
+        y1 = - y1
 
         if (y1 != current_servos_y or x1 != current_servos_x):
             current_servos_x = x1

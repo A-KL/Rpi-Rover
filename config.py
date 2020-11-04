@@ -24,6 +24,8 @@ power_logic_topic = "rover/power/logic"
 
 audio_play = "rover/audio/play"
 
+camera_object_detection = "rover/camera/detected"
+
 #################################################
 
 servo_tilt = servo_14_topic

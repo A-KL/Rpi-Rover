@@ -22,7 +22,7 @@ def on_message(client, userdata, message):
         c.duty_cycle = value
     elif (name == 'angle'):
         s = servo.Servo(pca.channels[channel], min_pulse=600, max_pulse=2600)
-        s.angle = value        
+        s.angle = value
 
 def run():
     mqtt = paho.Client()
