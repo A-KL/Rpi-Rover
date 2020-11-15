@@ -1,25 +1,22 @@
-import paho.mqtt.client as paho
 import json
-import config
-import power_driver
-import adc_driver
+
+import mqtt_module as mqtt
+import config_module as config
+import power_module as power
+import adc_module as adc
+
 import acs712
 
-def run():
-    mqtt = paho.Client()
-    mqtt.connect("127.0.0.1", 1883, 60)
+if __name__ == "__main__":
+    client = mqtt.Create()
 
-    voltage, current, power, shunt_voltage = power_driver.read()
+    voltage, current, power, shunt_voltage = power.read()
     jobject = { "v" : voltage, "i" : current, "p" : power, "sv" :  shunt_voltage}
 
-    mqtt.publish(config.power_logic_topic, json.dumps(jobject))
+    client.publish(config.power_logic_topic, json.dumps(jobject))
 
     main_i = acs712.read()
 
     jobject = { "v" : 0, "i" : main_i, "p" : 0}
 
-    mqtt.publish(config.power_main_topic, json.dumps(jobject))
-
-
-if __name__ == "__main__":
-    run()
+    client.publish(config.power_main_topic, json.dumps(jobject))

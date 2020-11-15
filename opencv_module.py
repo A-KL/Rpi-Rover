@@ -49,7 +49,3 @@ class OpenCVDriver(object):
                     self.cv2.putText(img,str(round(confidence*100,2)),(box[0]+200,box[1]+30), self.cv2.FONT_HERSHEY_COMPLEX,1,(0,255,0),2)
 
         return img, objectInfo
-
-    # def getObject(self, img, thres, nms, draw=True, objects=[]):
-    #     img = self.cv2.imdecode(frame, 1)
-    #     return self.getObjects(img, w, h, 0.45, 0.2, objects)

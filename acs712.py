@@ -1,4 +1,4 @@
-import adc_driver
+import adc_module as adc
 
 acs712_zero_drift_voltage = 595.70
 acs712_ref_voltage = 5.0
@@ -10,7 +10,7 @@ samples_count = 100
 def read(drift = acs712_zero_drift_voltage):
     adc_value = 0
     for i in range(samples_count):
-        reading = adc_driver.read(3)
+        reading = adc.read(3)
         adc_value += reading[1]
 
     adc_value = adc_value / samples_count

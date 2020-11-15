@@ -1,6 +1,6 @@
-import paho.mqtt.client as paho
 import json
-import config
+import mqtt_module as mqtt
+import config_module as config
 
 max_value = 65535
 
@@ -29,17 +29,17 @@ def updateServos(x, y):
         # Fix it: 0..130..180
     turn = 90 + int(90 * x)
 
-    mqtt.publish(config.servo_tilt, tilt)
-    mqtt.publish(config.servo_turn, turn)
+    client.publish(config.servo_tilt, tilt)
+    client.publish(config.servo_turn, turn)
 
 def updateMotors(x, y):
     motor_0_channel_a, motor_0_channel_b = wheel(y - x)
     motor_1_channel_a, motor_1_channel_b = wheel(y + x)
 
-    mqtt.publish(config.motor_1_a, int(motor_0_channel_a))
-    mqtt.publish(config.motor_1_b, int(motor_0_channel_b))
-    mqtt.publish(config.motor_2_a, int(motor_1_channel_a))
-    mqtt.publish(config.motor_2_b, int(motor_1_channel_b))
+    client.publish(config.motor_1_a, int(motor_0_channel_a))
+    client.publish(config.motor_1_b, int(motor_0_channel_b))
+    client.publish(config.motor_2_a, int(motor_1_channel_a))
+    client.publish(config.motor_2_b, int(motor_1_channel_b))
 
 def on_message(client, userdata, message):
     global current_servos_y
@@ -65,14 +65,13 @@ def on_message(client, userdata, message):
             current_motors_y = y
             updateMotors(current_motors_x, current_motors_y)
 
-mqtt = paho.Client()
+if __name__ == '__main__':
+    client = mqtt.Create()
 
-mqtt.connect("127.0.0.1", 1883, 60)
+    client.on_message = on_message
+    client.subscribe(config.control_camera_topic)
+    client.subscribe(config.control_rover_topic)
 
-mqtt.on_message = on_message
-mqtt.subscribe(config.control_camera_topic)
-mqtt.subscribe(config.control_rover_topic)
+    print("Ready to receive commands")
 
-print("Ready to receive commands")
-
-mqtt.loop_forever()
+    client.loop_forever()

@@ -1,15 +1,12 @@
 import cv2
 import time
-
-import paho.mqtt.client as paho
 import json
-
-from opencv_driver import *
-import config
+import config_module as config
+import mqtt_module as mqtt
+import opencv_module as opencv
 
 if __name__ == '__main__':
-    mqtt = paho.Client()
-    mqtt.connect("127.0.0.1", 1883, 60)
+    client = mqtt.Create()
 
     cap = cv2.VideoCapture(0)
     cap.set(3, 640)
@@ -17,7 +14,7 @@ if __name__ == '__main__':
 
     print("Video initialized. Loading DNN Detection Model...")
 
-    driver = OpenCVDriver("dnn")
+    driver = opencv.OpenCVDriver("artifatcs/dnn")
     driver.load()
 
     print("Model OK!")
@@ -31,14 +28,15 @@ if __name__ == '__main__':
 
             start_time = time.time()
 
-            result, objectInfo = driver.getObjects(img, 0.45, 0.2, objects=['person','mouse'])
+            result, objectInfo = driver.getObjects(img, 0.45, 0.2) 
+            # , objects=['person','mouse']
 
             print(f"Detection {time.time() - start_time}sec")
 
             if (len(objectInfo) > 0):
                 print(objectInfo)
-                # mqtt.publish(config.camera_object_detection, objectInfo)
+                # client.publish(config.camera_object_detection, objectInfo)
     except:
         cap.release()
-        mqtt.disconnect()
+        client.disconnect()
         raise

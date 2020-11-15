@@ -1,10 +1,12 @@
-import paho.mqtt.client as paho
 import time
 import board
 import busio
+
 import adafruit_pca9685
 from adafruit_motor import servo
-import config
+
+import mqtt_module as mqtt
+import config_module as config
 
 i2c = busio.I2C(board.SCL, board.SDA)
 pca = adafruit_pca9685.PCA9685(i2c)
@@ -24,18 +26,14 @@ def on_message(client, userdata, message):
         s = servo.Servo(pca.channels[channel], min_pulse=600, max_pulse=2600)
         s.angle = value
 
-def run():
-    mqtt = paho.Client()
-    mqtt.connect("127.0.0.1", 1883, 60)
-    mqtt.on_message = on_message
-    mqtt.subscribe(config.motors_topic)
+if __name__ == "__main__":    
+    client = mqtt.Create()
+    client.on_message = on_message
+    client.subscribe(config.motors_topic)
 
     print("Motors service ready")
 
-    mqtt.loop_forever()
+    client.loop_forever()
 
     print("Motors service stopped")    
-
-if __name__ == "__main__":    
-    run()
     pca.deinit()

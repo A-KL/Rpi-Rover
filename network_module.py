@@ -8,6 +8,9 @@ def get_interface():
     host = socket.gethostname()
     return ipaddr, host
 
+def cameraConnection():
+    return socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
 if __name__ == "__main__":
     ip, host = get_interface()
     print ("IP:", ip, " Host:", host)
