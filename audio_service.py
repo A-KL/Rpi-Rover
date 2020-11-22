@@ -8,9 +8,7 @@ def on_message(client, userdata, message):
     os.system(f"aplay ~/projects/Rover/artifatcs/sound/{value}")
 
 if __name__ == "__main__":
-    client = mqtt.Create()
-    client.on_message = on_message
-    client.subscribe(config.audio_play)
+    client = mqtt.Create(config.audio_play, on_message)
 
     print("Audio service ready")
 

@@ -1,25 +1,31 @@
 import os
 import json
 import socket
-import threading
 import json
-import picamera
-from quart import Quart, websocket, render_template, send_file
+import io
+from picamera import *
+from threading import *
+from quart import *
 
-locations       = ['/home/pi/projects/Rover/assets/www', '/home/pi/projects/Rover/assets/www/vendor/dist']
-current_frame   = bytearray(5 * 4096)
-app             = Quart(__name__)
+locations = ['/home/pi/projects/Rover/assets/www', '/home/pi/projects/Rover/assets/www/vendor/dist']
+app       = Quart(__name__)
 
-class WriteCallbackStream(object):
-    def __init__(self, write_callback):
-        self.write_callback = write_callback
+class StreamingOutput(object):
+    def __init__(self):
+        self.frame = None
+        self.buffer = io.BytesIO()
+        self.condition = Condition()
 
     def write(self, buf):
-        return self.write_callback(buf)
-
-def on_new_raw_frame(buffer):
-    global current_frame
-    current_frame = buffer
+        if buf.startswith(b'\x00\x00\x00\x01'):
+            # New frame, copy the existing buffer's content and notify all
+            # clients it's available
+            self.buffer.truncate()
+            with self.condition:
+                self.frame = self.buffer.getvalue()
+                self.condition.notify_all()
+            self.buffer.seek(0)
+        return self.buffer.write(buf)
 
 @app.route('/')
 async def index():
@@ -48,15 +54,16 @@ async def connected():
     await websocket.send(json.dumps(init))
 
     while websocket.endpoint == "connected":
-        global current_frame
-        await websocket.send(current_frame)
+        with output.condition:
+            output.condition.wait()
+            await websocket.send(output.frame)
 
 if __name__ == '__main__':
-    stream = WriteCallbackStream(on_new_raw_frame)
+    output = StreamingOutput()
 
-    with picamera.PiCamera() as camera:
+    with PiCamera() as camera:
         camera.resolution = (640, 480)
         camera.framerate = 12
-        camera.start_recording(stream, format='h264', quality=20, profile='baseline')
+        camera.start_recording(output, format='h264', quality=20, profile='baseline')
 
         app.run(host='0.0.0.0', debug=False)

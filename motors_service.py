@@ -27,9 +27,7 @@ def on_message(client, userdata, message):
         s.angle = value
 
 if __name__ == "__main__":    
-    client = mqtt.Create()
-    client.on_message = on_message
-    client.subscribe(config.motors_topic)
+    client = mqtt.Create(config.motors_topic, on_message)
 
     print("Motors service ready")
 
