@@ -7,7 +7,7 @@ import picamera
 from quart import Quart, websocket, render_template, send_file
 
 locations       = ['/home/pi/projects/Rover/assets/www', '/home/pi/projects/Rover/assets/www/vendor/dist']
-current_frame   = bytearray(4096)
+current_frame   = bytearray(5 * 4096)
 app             = Quart(__name__)
 
 class WriteCallbackStream(object):
