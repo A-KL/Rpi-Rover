@@ -21,6 +21,7 @@ control_rover_topic = "rover/control/rover"
 
 power_main_topic = "rover/power/main"
 power_logic_topic = "rover/power/logic"
+power_ups_topic = "rover/power/ups"
 
 audio_play = "rover/audio/play"
 
