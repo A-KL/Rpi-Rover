@@ -3,6 +3,8 @@ import network_module as network
 import mqtt_module as mqtt
 import config_module as config
 
+lcd = i2c_lcd.lcd()
+
 def on_message(client, userdata, message):
     line = int(message.topic.split("/")[3])
     value = message.payload.decode("utf-8")
@@ -11,8 +13,6 @@ def on_message(client, userdata, message):
     lcd.lcd_display_string(value, line)
 
 if __name__ == "__main__":
-    lcd = i2c_lcd.lcd()
-
     lcd.lcd_clear()
 
     ip, host = network.get_interface()
