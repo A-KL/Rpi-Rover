@@ -24,8 +24,11 @@ power_logic_topic = "rover/power/logic"
 power_ups_topic = "rover/power/ups"
 
 audio_play = "rover/audio/play"
+audio_say = "rover/audio/say"
 
 camera_object_detection = "rover/camera/detected"
+
+camera_unitv_objects = "rover/unitv/detected"
 
 #################################################
 
