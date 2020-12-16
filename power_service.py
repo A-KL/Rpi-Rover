@@ -15,8 +15,8 @@ if __name__ == "__main__":
 
     client.publish(config.power_logic_topic, json.dumps(jobject))
 
-    main_i = acs712.read()
+    # main_i = acs712.read()
 
-    jobject = { "v" : 0, "i" : main_i, "p" : 0}
+    # jobject = { "v" : 0, "i" : main_i, "p" : 0}
 
-    client.publish(config.power_main_topic, json.dumps(jobject))
+    # client.publish(config.power_main_topic, json.dumps(jobject))
