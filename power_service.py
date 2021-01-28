@@ -3,9 +3,6 @@ import json
 import mqtt_module as mqtt
 import config_module as config
 import power_module as power
-import adc_module as adc
-
-import acs712
 
 if __name__ == "__main__":
     client = mqtt.Create()

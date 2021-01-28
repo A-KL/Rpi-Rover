@@ -28,7 +28,9 @@ audio_say = "rover/audio/say"
 
 camera_object_detection = "rover/camera/detected"
 
-camera_unitv_objects = "rover/unitv/detected"
+machine_vision_objects = "rover/machine_vision/objects"
+
+machine_vision_proximity = "rover/machine_vision/proximity"
 
 #################################################
 
