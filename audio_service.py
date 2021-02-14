@@ -5,7 +5,7 @@ import config_module as config
 
 def on_message(client, userdata, message):
     value = message.payload.decode("utf-8")
-    os.system(f"aplay ~/projects/Rover/assets/sound/{value}")
+    os.system(f"aplay -D plughw:CARD=wm8960soundcard,DEV=0 ~/projects/Rover/assets/sound/{value}")
 
 if __name__ == "__main__":
     client = mqtt.Create(config.audio_play, on_message)
