@@ -52,9 +52,9 @@ motor_2_b = motor_19_topic
 #     [0x04, "Groove ADC"],
 #     [0x19, ""], 
 #     [0x27, "16x2 LCD"], 
-#     [0x40, "Servo PWM"], 
+#     [0x42, "Servo PWM"], 
 #     [0x43, "Motor PWM"], 
-#     [0x41, "5V Power sensor"], 
-#     [0x44, "12V Power sensor"], 
+#     [0x40, "5V Power sensor"], 
+#     [0x41, "12V Power sensor"], 
 #     [0x70, ""] 
 # ]

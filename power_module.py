@@ -3,10 +3,10 @@ from ina219 import INA219, DeviceRangeError
 SHUNT_OHMS = 0.1
 
 def create_ina():
-    ina0 = INA219(SHUNT_OHMS, address=0x41)
+    ina0 = INA219(SHUNT_OHMS, address=0x40)
     ina0.configure(ina0.RANGE_16V)
 
-    ina1 = INA219(SHUNT_OHMS, address=0x44)
+    ina1 = INA219(SHUNT_OHMS, address=0x41)
     ina1.configure(ina1.RANGE_16V)
 
     return [ina0, ina1]

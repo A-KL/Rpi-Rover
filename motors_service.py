@@ -29,7 +29,7 @@ def create_pca(i2c, address):
     pca.frequency = 50
     return pca
 
-devices = [create_pca(i2c, 0x40), create_pca(i2c, 0x43)]
+devices = [create_pca(i2c, 0x42), create_pca(i2c, 0x43)]
 
 def on_message(client, userdata, message):
     channel = int(message.topic.split("/")[2])
