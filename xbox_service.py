@@ -6,8 +6,6 @@ import mqtt_module as mqtt
 import steering_module as steering
 import config_module as config
 
-max_value = 65535
-
 current_servos_x = 0
 current_servos_y = 0
 
@@ -37,7 +35,7 @@ if __name__ == '__main__':
     try:
         while not joy.Back():
             x0, y0 = joy.leftStick()
-            y0 = joy.rightTrigger() - joy.leftTrigger() 
+            y0 = joy.rightTrigger() - joy.leftTrigger()
 
             x1, y1 = joy.rightStick()
 
