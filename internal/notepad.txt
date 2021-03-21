@@ -1,0 +1,11 @@
+# NetCat + raspivid
+raspivid -t 0 -n -w 1280 -h 720 -fps 48 -ex fixedfps -b 3000000 -vf -sa -100 -o - | nc -l 8085
+
+...
+cv::VideoCapture _cv;
+if(_cv.open("tcp://YOUR-RPI-IP-ADDRESS:PORT_NUMBER")) { // change MACRO to the actual values!
+   // Yhoo!
+} else {
+   std::cerr << "Can not open video source!";
+}
+...

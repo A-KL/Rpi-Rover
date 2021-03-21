@@ -44,5 +44,5 @@ def on_message(client, userdata, message):
             on_person(x, y, w, h)
 
 if __name__ == "__main__":    
-    client = mqtt.Create(config.camera_unitv_objects, on_message)
+    client = mqtt.Create(config.machine_vision_objects, on_message)
     client.loop_forever()
