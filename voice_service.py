@@ -13,7 +13,7 @@ def on_message(client, userdata, message):
 if __name__ == "__main__":
     engine = pyttsx3.init() 
     engine.setProperty('volume', 1)
-    engine.setProperty('rate', 150)
+    engine.setProperty('rate', 300)
 
     # voices = engine.getProperty('voices')
     # for voice in voices:

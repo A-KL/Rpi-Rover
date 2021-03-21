@@ -38,7 +38,8 @@ if __name__ == "__main__":
     encoder0 = driver.readEncoder(0)
     encoder1 = driver.readEncoder(1)
 
-    motor0 = driver.writeSpeed(0, 500)
+    driver.writeSpeed(0, -255)
+    # driver.writeSpeed(2, 65100)
 
     print(version)
     print(encoder0)
