@@ -1,5 +1,5 @@
 import json
-import mqtt_module as mqtt
+import modules.mqtt_module as mqtt
 import config_module as config
 
 max_value = 65535

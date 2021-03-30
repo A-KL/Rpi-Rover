@@ -1,10 +1,12 @@
 import sys
 import math
 import time
-import xbox_module as xbox
-import mqtt_module as mqtt
-import steering_module as steering
+
 import config_module as config
+import steering_module as steering
+
+import modules.xbox_module as xbox
+import modules.mqtt_module as mqtt
 
 current_servos_x = 0
 current_servos_y = 0

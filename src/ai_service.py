@@ -1,7 +1,7 @@
 import json
 import time
 import steering_module as steering
-import mqtt_module as mqtt
+import modules.mqtt_module as mqtt
 import config_module as config
 
 classes = ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat', 'chair', 'cow', 'diningtable', 'dog', 'horse', 'motorbike', 'person', 'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor']

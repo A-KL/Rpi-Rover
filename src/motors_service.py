@@ -5,7 +5,7 @@ import busio
 import adafruit_pca9685
 from adafruit_motor import servo
 
-import mqtt_module as mqtt
+import modules.mqtt_module as mqtt
 import config_module as config
 
 # class I2CDeviceFactory(object):

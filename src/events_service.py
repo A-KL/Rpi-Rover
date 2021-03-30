@@ -1,8 +1,8 @@
 import asyncio
 import evdev
-import mqtt_module as mqtt
+import modules.mqtt_module as mqtt
 import steering_module as steering
-import evdev_module as input
+import modules.evdev_module as input
 import config_module as config
 
 # Left

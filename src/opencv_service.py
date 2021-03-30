@@ -2,8 +2,8 @@ import cv2
 import time
 import json
 import config_module as config
-import mqtt_module as mqtt
-import opencv_module as opencv
+import modules.mqtt_module as mqtt
+import modules.opencv_module as opencv
 
 if __name__ == '__main__':
     client = mqtt.Create()

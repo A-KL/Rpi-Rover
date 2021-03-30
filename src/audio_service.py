@@ -1,7 +1,7 @@
 import os
 import subprocess
 import pyttsx3
-import mqtt_module as mqtt
+import modules.mqtt_module as mqtt
 import config_module as config
 
 def on_message(client, userdata, message):

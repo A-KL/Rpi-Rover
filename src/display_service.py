@@ -1,6 +1,6 @@
 import i2c_lcd
-import network_module as network
-import mqtt_module as mqtt
+import modules.network_module as network
+import modules.mqtt_module as mqtt
 import config_module as config
 
 lcd = i2c_lcd.lcd()

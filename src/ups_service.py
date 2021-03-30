@@ -1,7 +1,7 @@
 import json
-import mqtt_module as mqtt
+import modules.mqtt_module as mqtt
 import config_module as config
-import ups_module as ups
+import modules.ups_module as ups
 
 if __name__ == "__main__":
     ups = ups.UPS()
