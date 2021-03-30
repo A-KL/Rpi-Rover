@@ -17,7 +17,7 @@ def on_message(client, userdata, message):
 
 def push_encoder_message(index):
     value = driver.readEncoder(index)
-    client.publish(encoders_topic_template + str(index), value)
+    client.publish(config.encoders_topic_template + str(index), value)
 
 if __name__ == "__main__":
     driver = dc_module.DcMotorDriver()
