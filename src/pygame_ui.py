@@ -8,6 +8,8 @@ if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
 
+    pygame.mouse.set_visible(False)
+
     dir = os.path.dirname(os.path.abspath(__file__))
 
     window_surface = pygame.display.set_mode((800, 480))
@@ -27,7 +29,28 @@ if __name__ == "__main__":
     main_i = pygame_gui_custom.UIStack(pygame.Rect(220, 100, 200, 80), 2, manager)
     main_i.tmp_init(0, 4, 1.04, 'I', 'main')
 
+    # print(pygame.image.get_extended())
+
+    hal_outer_sprite = pygame.image.load(dir + '/../assets/img/1280px-HAL9000-outer.bmp')
+    hal_outer_sprite.convert()
+
+    hal_outer_sprite = pygame.transform.rotate(hal_outer_sprite, -90)
+    hal_outer_sprite = pygame.transform.smoothscale(hal_outer_sprite, (400, 400))
+
+    hal_inner_sprite = pygame.image.load(dir + '/../assets/img/1280px-HAL9000-inner.bmp')
+    hal_inner_sprite.convert()
+
+    hal_inner_sprite = pygame.transform.rotate(hal_inner_sprite, -90)
+    w = int(908/3)
+    h = int(860/3)
+    x = int((800 - w ) / 2)
+    y = int((480 - h ) / 2)
+    hal_inner_sprite = pygame.transform.smoothscale(hal_inner_sprite, (w, h))
+
     is_running = True
+
+    alpha = 0
+    step = 15
 
     while is_running:
         time_delta = clock.tick(60)/1000.0
@@ -40,6 +63,16 @@ if __name__ == "__main__":
         manager.update(time_delta)
 
         window_surface.blit(background, (0, 0))
-        manager.draw_ui(window_surface)
+        # manager.draw_ui(window_surface)
+        window_surface.blit(hal_outer_sprite, (200, 40))
+
+        window_surface.blit(hal_inner_sprite, (x, y))
+
+        if alpha < 0 or alpha >= 256:
+            step = step * -1
+
+        alpha += step 
+
+        hal_inner_sprite.set_alpha(alpha)
 
         pygame.display.update()
