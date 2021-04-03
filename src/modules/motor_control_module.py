@@ -16,19 +16,19 @@ class DcMotorDriver(object):
         self.device.write(bytes([0x64]))
         result = bytearray(1)
         self.device.readinto(result)
-        return "".join("{:02x}".format(x) for x in result)
+        return int.from_bytes(result, byteorder='little', signed=False)
 
     def readEncoder(self, index):
         address = self.ENCODER_ADDR_BASE  + index * 4
         self.device.write(bytes([address]))
         result = bytearray(4)
         self.device.readinto(result)
-        return "".join("{:02x}".format(x) for x in result)
+        return int.from_bytes(result, byteorder='little', signed=False)
 
     def writeSpeed(self, index: int, speed: int):
         address = self.MOTOR_ADDR_BASE  + index * 2
         payload = bytearray([address])
-        payload.extend(speed.to_bytes(2, 'big'))
+        payload.extend(speed.to_bytes(2, byteorder='little', signed=True))
         self.device.write(payload)               
 
 if __name__ == "__main__":
@@ -38,8 +38,8 @@ if __name__ == "__main__":
     encoder0 = driver.readEncoder(0)
     encoder1 = driver.readEncoder(1)
 
-    driver.writeSpeed(0, -255)
-    # driver.writeSpeed(2, 65100)
+    driver.writeSpeed(0, 0)
+    driver.writeSpeed(1, 0)
 
     print(version)
     print(encoder0)
