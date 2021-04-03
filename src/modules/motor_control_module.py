@@ -23,7 +23,7 @@ class DcMotorDriver(object):
         self.device.write(bytes([address]))
         result = bytearray(4)
         self.device.readinto(result)
-        return int.from_bytes(result, byteorder='little', signed=False)
+        return int.from_bytes(result, byteorder='little', signed=True)
 
     def writeSpeed(self, index: int, speed: int):
         address = self.MOTOR_ADDR_BASE  + index * 2
