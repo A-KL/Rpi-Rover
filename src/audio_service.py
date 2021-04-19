@@ -10,9 +10,16 @@ def on_message(client, userdata, message):
     if message.topic == config.audio_play:
         os.system(f"aplay ~/projects/Rover/assets/sound/{value}")
 
+    # curl -L --retry 30 --get --fail \
+    # --data-urlencode "text=Hello World!" \
+    # "https://glados.c-net.org/generate" | aplay
+
     elif message.topic == config.audio_say:
         engine.say(value)  
         engine.runAndWait()
+
+    elif message.topic == "glados":
+        os.system(f"curl -L --retry 30 --get --fail --data-urlencode \"text={value}\" \"https://glados.c-net.org/generate\" | aplay")
 
 if __name__ == "__main__":
     engine = pyttsx3.init() 
