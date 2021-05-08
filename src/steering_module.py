@@ -1,21 +1,22 @@
 import modules.mqtt_module as mqtt
 import config_module as config
 
-max_value = 65535
+max_value = 255
 
 def wheel(v):
-    if (v>1):
+    if (v > 1):
         v = 1
 
-    if (v<-1):
+    if (v < -1):
         v = -1
 
-    if (v > 0):
-        return v * max_value, 0
-    elif (v < 0):
-        return 0, (-v) * max_value
-    else:
-        return 0, 0
+    return max_value * v
+    # if (v > 0):
+    #     return v * max_value, 0
+    # elif (v < 0):
+    #     return 0, (-v) * max_value
+    # else:
+    #     return 0, 0
 
 def updateServos(client, x, y):
     tilt = 90 + int(90 * y)
@@ -26,10 +27,8 @@ def updateServos(client, x, y):
     client.publish(config.servo_turn, turn)
 
 def updateMotors(client, x, y):
-    motor_0_channel_a, motor_0_channel_b = wheel(y - x)
-    motor_1_channel_a, motor_1_channel_b = wheel(y + x)
+    motor_a = wheel(y - x)
+    motor_b = wheel(y + x)
 
-    client.publish(config.motor_1_a, int(motor_0_channel_a))
-    client.publish(config.motor_1_b, int(motor_0_channel_b))
-    client.publish(config.motor_2_a, int(motor_1_channel_a))
-    client.publish(config.motor_2_b, int(motor_1_channel_b))
+    client.publish(config.motor_a, int(motor_a))
+    client.publish(config.motor_b, int(motor_b))
