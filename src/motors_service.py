@@ -11,9 +11,14 @@ def on_message(client, userdata, message):
     channel = int(message.topic.split("/")[2])
     value = int(message.payload.decode("utf-8"))
 
-    print(f"Channel:{channel} {value}")
-
     driver.writeSpeed(channel, value)
+
+    # print(f"Channel:{channel} {value}")
+
+    # try:
+    #     driver.writeSpeed(channel, value)
+    # except OSError as error:
+    #     print(error)   
 
 def push_encoder_message(index):
     value = driver.readEncoder(index)
@@ -31,8 +36,8 @@ if __name__ == "__main__":
     # client.loop_forever()
 
     while True:
-        for i in range(4):
-            push_encoder_message(i)
+        # for i in range(4):
+        #     push_encoder_message(i)
         time.sleep(0.1)
 
     client.loop_stop(force=False)

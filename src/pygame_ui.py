@@ -63,16 +63,17 @@ if __name__ == "__main__":
         manager.update(time_delta)
 
         window_surface.blit(background, (0, 0))
-        # manager.draw_ui(window_surface)
-        window_surface.blit(hal_outer_sprite, (200, 40))
 
-        window_surface.blit(hal_inner_sprite, (x, y))
+        manager.draw_ui(window_surface)
 
-        if alpha < 0 or alpha >= 256:
-            step = step * -1
+        # window_surface.blit(hal_outer_sprite, (200, 40))
+        # window_surface.blit(hal_inner_sprite, (x, y))
 
-        alpha += step 
+        # if alpha < 0 or alpha >= 256:
+        #     step = step * -1
 
-        hal_inner_sprite.set_alpha(alpha)
+        # alpha += step 
+
+        # hal_inner_sprite.set_alpha(alpha)
 
         pygame.display.update()

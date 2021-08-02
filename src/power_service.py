@@ -2,7 +2,7 @@ import json
 
 import modules.mqtt_module as mqtt
 import config_module as config
-import modules.power_module as power_sensor
+import modules.ina219_module as power_sensor
 
 if __name__ == "__main__":
     client = mqtt.Create()

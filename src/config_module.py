@@ -4,12 +4,17 @@ pwm_topic = "rover/pwm/+/+"
 servo_0_topic = "rover/pwm/0/angle"
 servo_1_topic = "rover/pwm/1/angle"
 
-# MOTOR Unit #
+# Steering #
+steering_sub = "rover/steering/+"
 
-motors_topic = "rover/motors/+"
+steering_x_topic = "rover/steering/x"
+steering_y_topic = "rover/steering/y"
 
+# MOTOR+ENC Unit #
 encoders_topic_template = "rover/encoders/"
+
 encoders_topic = encoders_topic_template + "+"
+motors_topic = "rover/motors/+"
 
 encoder_0_topic = "rover/encoders/0"
 encoder_1_topic = "rover/encoders/1"
@@ -21,26 +26,28 @@ motor_1_topic = "rover/motors/1"
 motor_2_topic = "rover/motors/2"
 motor_3_topic = "rover/motors/3"
 
-# LCD #
-
-lcd_lines = "rover/lcd/lines/+"
-lcd_line_1 = "rover/lcd/lines/1"
-lcd_line_2 = "rover/lcd/lines/2"
-
-control_camera_topic = "rover/control/camera" 
-control_rover_topic = "rover/control/rover" 
-
-power_main_topic = "rover/power/main"
-power_logic_topic = "rover/power/logic"
-power_ups_topic = "rover/power/ups"
+# Audio #
+audio_any = "rover/audio/+"
 
 audio_play = "rover/audio/play"
 audio_say = "rover/audio/say"
 
+# LCD #
+lcd_lines = "rover/lcd/lines/+"
+lcd_line_1 = "rover/lcd/lines/1"
+lcd_line_2 = "rover/lcd/lines/2"
+
+# Power #
+power_main_topic = "rover/power/main"
+power_logic_topic = "rover/power/logic"
+power_ups_topic = "rover/power/ups"
+
+# Camera #
+control_camera_topic = "rover/control/camera" 
+control_rover_topic = "rover/control/rover" 
+
 camera_object_detection = "rover/camera/detected"
-
 machine_vision_objects = "rover/machine_vision/objects"
-
 machine_vision_proximity = "rover/machine_vision/proximity"
 
 #################################################

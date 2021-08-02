@@ -27,8 +27,8 @@ def updateServos(client, x, y):
     client.publish(config.servo_turn, turn)
 
 def updateMotors(client, x, y):
-    motor_a = wheel(y - x)
-    motor_b = wheel(y + x)
+    motor_a = wheel(y + x)
+    motor_b = wheel(y - x)
 
     client.publish(config.motor_a, int(motor_a))
     client.publish(config.motor_b, int(motor_b))
