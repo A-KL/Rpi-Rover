@@ -141,6 +141,3 @@ class UIStack(UIPanel):
         surface.blit(small_label, (left_margin, top_margin))
 
         self.set_image(surface)
-        
-        
-

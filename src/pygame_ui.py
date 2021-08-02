@@ -1,35 +1,58 @@
 import os
 import pygame
 import pygame_gui
-import pygame_gui_custom
+from gui.dashboard import *
+from gui.ui_helpers import *
 
 if __name__ == "__main__":    
-    # initialize the display
+    SCREEN_WIDTH = 800
+    SCREEN_HEIGHT = 480
+    DISPLAY = (SCREEN_WIDTH,SCREEN_HEIGHT)
+    PRIMARY_COLOR = (255, 0, 56)
+    GREEN_COLOR = (0, 255, 0)
+    YELLOW_COLOR = (255, 204, 0)
+
+    dir = os.path.dirname(os.path.abspath(__file__))
+
     pygame.init()
     pygame.font.init()
 
     pygame.mouse.set_visible(False)
 
-    dir = os.path.dirname(os.path.abspath(__file__))
-
-    window_surface = pygame.display.set_mode((800, 480))
-    manager = pygame_gui.UIManager((800, 480))
+    screen = pygame.display.set_mode(DISPLAY)
+    manager = pygame_gui.UIManager(DISPLAY)
     clock = pygame.time.Clock()
-    background = pygame.Surface((800, 480))
+    background = pygame.Surface(DISPLAY)
 
-    logic_v = pygame_gui_custom.UIStack(pygame.Rect(10, 10, 200, 80), 2, manager)
+    whitrabt = pygame.font.Font(dir + '/gui/whitrabt.ttf', 70)
+    oblivious = pygame.font.Font(dir + '/gui/ObliviousFont.ttf', 70)
+
+    # =============================================================
+
+    logic_v = UIStack(pygame.Rect(10, 10, 200, 80), 2, manager)
     logic_v.tmp_init(0, 6, 5.14, 'V', 'logic')
 
-    logic_i = pygame_gui_custom.UIStack(pygame.Rect(220, 10, 200, 80), 2, manager)
+    logic_i = UIStack(pygame.Rect(220, 10, 200, 80), 2, manager)
     logic_i.tmp_init(0, 4, 2.14, 'I', 'logic')
 
-    main_v = pygame_gui_custom.UIStack(pygame.Rect(10, 100, 200, 80), 2, manager)
+    main_v = UIStack(pygame.Rect(10, 100, 200, 80), 2, manager)
     main_v.tmp_init(0, 16, 11.01, 'V', 'main')
 
-    main_i = pygame_gui_custom.UIStack(pygame.Rect(220, 100, 200, 80), 2, manager)
+    main_i = UIStack(pygame.Rect(220, 100, 200, 80), 2, manager)
     main_i.tmp_init(0, 4, 1.04, 'I', 'main')
 
     # print(pygame.image.get_extended())
+
+    # =============================================================
+
+    error_text = whitrabt.render("Error.", True, PRIMARY_COLOR)
+    warning_text = whitrabt.render("Warning.", True, YELLOW_COLOR)
+    success_text = whitrabt.render("Success.", True, GREEN_COLOR)
+
+    chevron_top_surface = draw_chevron(SCREEN_WIDTH, SCREEN_HEIGHT, 20, YELLOW_COLOR)
+    chevron_bottom_surface = draw_chevron(SCREEN_WIDTH, SCREEN_HEIGHT, 20, YELLOW_COLOR)
+
+    # =============================================================
 
     hal_outer_sprite = pygame.image.load(dir + '/../assets/img/1280px-HAL9000-outer.bmp')
     hal_outer_sprite.convert()
@@ -62,9 +85,13 @@ if __name__ == "__main__":
 
         manager.update(time_delta)
 
-        window_surface.blit(background, (0, 0))
+        #screen.blit(background, (0, 0))
 
-        manager.draw_ui(window_surface)
+        screen.blit(chevron_top_surface, (-20, 0))
+        screen.blit(chevron_bottom_surface, (-20, SCREEN_HEIGHT - 40))
+        screen.blit(warning_text, (10, 70))
+
+        # manager.draw_ui(screen)
 
         # window_surface.blit(hal_outer_sprite, (200, 40))
         # window_surface.blit(hal_inner_sprite, (x, y))
