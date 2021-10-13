@@ -31,9 +31,7 @@ if __name__ == "__main__":
     engine.setProperty('rate', 150)
     engine.setProperty('voice', 'english')
 
-    client = mqtt.Create()
-    client.on_message = on_message
-    client.subscribe(config.audio_any)
+    client = mqtt.Create(config.audio_any, on_message)
 
     play(config.audio_say, "Voice service ready")
 

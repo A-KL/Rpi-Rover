@@ -77,8 +77,10 @@ if __name__ == "__main__":
 
     while is_running:
         time_delta = clock.tick(60)/1000.0
+        
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or event.type == 1792:
+                print(event)
                 is_running = False
 
             manager.process_events(event)

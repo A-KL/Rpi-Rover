@@ -7,6 +7,13 @@ import config_module as config
 board = Board(1, 0x10)    # Select i2c bus 1, set address to 0x10
 servo = Servo(board)
 
+# camera parking
+# 3: 70 degree
+# 2: 5 degree
+# camera work
+# 3: 50..125
+# 2: 90 degree
+
 def print_board_status():
   if board.last_operate_status == board.STA_OK:
     print("board status: everything ok")

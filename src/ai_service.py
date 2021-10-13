@@ -33,16 +33,30 @@ def on_person(x, y, w, h):
 def on_message(client, userdata, message):
     raw = message.payload.decode("utf-8")
     print(raw)
-    objects = json.loads(message.payload.decode("utf-8"))
-    for obj in objects:
-        index = obj['classid']
-        if index == 14:
-            x = obj['x']
-            y = obj['y']
-            w = obj['w']
-            h = obj['h']
-            on_person(x, y, w, h)
+
+    if message.topic == config.machine_vision_objects:
+        objects = json.loads(message.payload.decode("utf-8"))
+        for obj in objects:
+            index = obj['classid']
+            if index == 14:
+                x = obj['x']
+                y = obj['y']
+                w = obj['w']
+                h = obj['h']
+                on_person(x, y, w, h)
+    elif message.topic == "rover/ai-service/enabled":
+        client.publish(config.servo_3_topic, 70)
+        time.sleep(1)
+        if raw == "0":
+            client.publish(config.servo_2_topic, 5)
+            
+        elif raw == "1":
+            client.publish(config.servo_2_topic, 90)
+            time.sleep(1)
+            client.publish(config.servo_3_topic, 90)
 
 if __name__ == "__main__":    
-    client = mqtt.Create(config.machine_vision_objects, on_message)
+    client = mqtt.Create()
+    client.on_message = on_message
+    client.subscribe([("rover/ai-service/enabled",0),(config.machine_vision_objects,0)])
     client.loop_forever()

@@ -3,6 +3,8 @@ pwm_topic = "rover/pwm/+/+"
 
 servo_0_topic = "rover/pwm/0/angle"
 servo_1_topic = "rover/pwm/1/angle"
+servo_2_topic = "rover/pwm/2/angle"
+servo_3_topic = "rover/pwm/3/angle"
 
 # Steering #
 steering_sub = "rover/steering/+"
