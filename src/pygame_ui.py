@@ -1,7 +1,10 @@
 import os
 import pygame
 import pygame_gui
+import pygame_gui.elements
+
 from gui.dashboard import *
+from gui.grid_layout import *
 from gui.ui_helpers import *
 
 if __name__ == "__main__":    
@@ -27,21 +30,25 @@ if __name__ == "__main__":
     whitrabt = pygame.font.Font(dir + '/gui/whitrabt.ttf', 70)
     oblivious = pygame.font.Font(dir + '/gui/ObliviousFont.ttf', 70)
 
+    layout = GridLayout(pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 5, 4, 5)
+
     # =============================================================
 
-    logic_v = UIStack(pygame.Rect(10, 10, 200, 80), 2, manager)
+    logic_v = UIStack(layout.get(2, 0), 2, manager) # 200 / 80
     logic_v.tmp_init(0, 6, 5.14, 'V', 'logic')
 
-    logic_i = UIStack(pygame.Rect(220, 10, 200, 80), 2, manager)
+    logic_i = UIStack(layout.get(2, 1), 2, manager)
     logic_i.tmp_init(0, 4, 2.14, 'I', 'logic')
 
-    main_v = UIStack(pygame.Rect(10, 100, 200, 80), 2, manager)
+    main_v = UIStack(layout.get(2, 2), 2, manager)
     main_v.tmp_init(0, 16, 11.01, 'V', 'main')
 
-    main_i = UIStack(pygame.Rect(220, 100, 200, 80), 2, manager)
+    main_i = UIStack(layout.get(2, 3), 2, manager)
     main_i.tmp_init(0, 4, 1.04, 'I', 'main')
 
-    # print(pygame.image.get_extended())
+    # =============================================================
+
+    close_button = pygame_gui.elements.UIButton(layout.get(3, 3), "Close", manager)
 
     # =============================================================
 
@@ -70,19 +77,19 @@ if __name__ == "__main__":
     y = int((480 - h ) / 2)
     hal_inner_sprite = pygame.transform.smoothscale(hal_inner_sprite, (w, h))
 
-    is_running = True
-
     alpha = 0
     step = 15
+
+# =============================================================
+
+    is_running = True
 
     while is_running:
         time_delta = clock.tick(60)/1000.0
         
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == 1792:
-                print(event)
+            if event.type == pygame.QUIT: # or event.type == 1792:
                 is_running = False
-
             manager.process_events(event)
 
         manager.update(time_delta)
@@ -93,7 +100,10 @@ if __name__ == "__main__":
         screen.blit(chevron_bottom_surface, (-20, SCREEN_HEIGHT - 40))
         screen.blit(warning_text, (10, 70))
 
-        # manager.draw_ui(screen)
+        manager.draw_ui(screen)
+
+        if close_button.check_pressed():
+            is_running = False
 
         # window_surface.blit(hal_outer_sprite, (200, 40))
         # window_surface.blit(hal_inner_sprite, (x, y))
