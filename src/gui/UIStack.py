@@ -43,9 +43,9 @@ class UIStack(UIPanel):
                                element_id=element_id)
         
         self.decoration_colour = "#FF0038"
+        self.background_colour = (20, 20, 20, 50)
         
-        
-        # self.background_colour = None
+        # self.background_colour = "#FFFFFF"
         # self.border_colour = None
         # self.background_image = None
         # self.border_width = 1
@@ -87,6 +87,8 @@ class UIStack(UIPanel):
         surface = pygame.surface.Surface(rect.size,
                                     flags=pygame.SRCALPHA,
                                     depth=32)
+
+        pygame.Surface.fill(surface, self.background_colour)
         
         line_size = 2
         gap_size = rect.w / 20

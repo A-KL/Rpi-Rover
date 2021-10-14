@@ -3,20 +3,55 @@ import pygame
 import pygame_gui
 import pygame_gui.elements
 
-from gui.dashboard import *
-from gui.grid_layout import *
+from gui.UIStack import *
+from gui.GridLayout import *
 from gui.ui_helpers import *
 
-if __name__ == "__main__":    
-    SCREEN_WIDTH = 800
-    SCREEN_HEIGHT = 480
-    SCREEN_POSITION = (0,0)
-    SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 480
+SCREEN_POSITION = (0,0)
+SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
-    MESSAGE_WIDTH = 700
-    MESSAGE_HEIGHT = 380
-    MESSAGE_SIZE = (MESSAGE_WIDTH, MESSAGE_HEIGHT)
-    MESSAGE_POSITION = ( (SCREEN_WIDTH - MESSAGE_WIDTH) / 2, (SCREEN_HEIGHT - MESSAGE_HEIGHT) / 2)
+MESSAGE_WIDTH = 700
+MESSAGE_HEIGHT = 380
+MESSAGE_SIZE = (MESSAGE_WIDTH, MESSAGE_HEIGHT)
+MESSAGE_POSITION = ( (SCREEN_WIDTH - MESSAGE_WIDTH) / 2, (SCREEN_HEIGHT - MESSAGE_HEIGHT) / 2)
+
+def draw_chevron(screen_width, screen_height, thickness = 15, color = Color("Red")):
+    chevron_surface = Surface((screen_width + thickness *2, screen_height))
+    
+    start_x = 0
+    start_y = 0
+    width = thickness
+    shift_x = width * 2
+
+    color_a = color
+    color_b = Color("Black")
+
+    while start_x < screen_width + 100:
+        pygame.draw.lines(chevron_surface, color_a, False, ((start_x, start_y), (start_x + shift_x, start_y + shift_x)), width)
+        start_x = start_x + width
+
+        pygame.draw.lines(chevron_surface, color_b, False, ((start_x, start_y), (start_x+ shift_x, start_y + shift_x)), width)
+        start_x = start_x + width
+        
+    return chevron_surface
+
+def draw_message_box(surface: pygame.Surface, font: pygame.font.Font, message, description, color):
+    caption = font.render(message, True, color)
+
+    chevron_top_surface = draw_chevron(MESSAGE_WIDTH, MESSAGE_HEIGHT, 20, color)
+    chevron_bottom_surface = draw_chevron(MESSAGE_WIDTH, MESSAGE_HEIGHT, 20, color)
+
+    surface.blit(chevron_top_surface, (-20, 4))
+    surface.blit(chevron_bottom_surface, (-20, MESSAGE_HEIGHT - 40 - 4))
+    surface.blit(caption, (10, 70))
+    surface.blit(description, (10, 120))
+
+    pygame.draw.rect(surface, color, ((0,0), MESSAGE_SIZE), 1),
+
+if __name__ == "__main__":    
+
 
     PRIMARY_COLOR = (255, 0, 56)
     GREEN_COLOR = (0, 255, 0)
@@ -27,20 +62,24 @@ if __name__ == "__main__":
 
     pygame.mouse.set_visible(False)
 
+    root = os.path.dirname(os.path.abspath(__file__))
     screen = pygame.display.set_mode(SCREEN_SIZE)
-    manager = pygame_gui.UIManager(SCREEN_SIZE)
+    manager = pygame_gui.UIManager(SCREEN_SIZE, root + '/gui/base_theme.json')
     clock = pygame.time.Clock()
 
     display_surface = pygame.Surface(SCREEN_SIZE)
     message_surface = pygame.Surface(MESSAGE_SIZE)
 
-    root = os.path.dirname(os.path.abspath(__file__))
-
-    whitrabt = pygame.font.Font(root + '/gui/whitrabt.ttf', 70)
-    oblivious = pygame.font.Font(root + '/gui/ObliviousFont.ttf', 70)
+    whitrabt = pygame.font.Font(root + '/../assets/fonts/whitrabt.ttf', 70)
+    oblivious = pygame.font.Font(root + '/../assets/fonts/ObliviousFont.ttf', 70)
 
     layout = GridLayout(pygame.Rect(SCREEN_POSITION, SCREEN_SIZE), 5, 4, 5)
 
+    # =============================================================
+    background_image = pygame.image.load(root + '/../assets/img/background.jpg')
+    background_image.convert()
+    background_image.set_alpha(80)
+    display_surface.blit(background_image, SCREEN_POSITION)
     # =============================================================
 
     logic_v = UIStack(layout.get(2, 0), 2, manager) # 200 / 80
@@ -58,6 +97,9 @@ if __name__ == "__main__":
     # =============================================================
 
     close_button = pygame_gui.elements.UIButton(layout.get(3, 3), "Close", manager)
+    close_button.normal_bg = (20, 20, 20, 50)
+    close_button.hovered_bg = (20, 20, 20, 150)
+    close_button.active_bg = "#FF0038"
     show_button = pygame_gui.elements.UIButton(layout.get(3, 2), "Show", manager)
 
     # =============================================================
