@@ -10,27 +10,36 @@ from gui.ui_helpers import *
 if __name__ == "__main__":    
     SCREEN_WIDTH = 800
     SCREEN_HEIGHT = 480
-    DISPLAY = (SCREEN_WIDTH,SCREEN_HEIGHT)
+    SCREEN_POSITION = (0,0)
+    SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    MESSAGE_WIDTH = 700
+    MESSAGE_HEIGHT = 380
+    MESSAGE_SIZE = (MESSAGE_WIDTH, MESSAGE_HEIGHT)
+    MESSAGE_POSITION = ( (SCREEN_WIDTH - MESSAGE_WIDTH) / 2, (SCREEN_HEIGHT - MESSAGE_HEIGHT) / 2)
+
     PRIMARY_COLOR = (255, 0, 56)
     GREEN_COLOR = (0, 255, 0)
     YELLOW_COLOR = (255, 204, 0)
-
-    dir = os.path.dirname(os.path.abspath(__file__))
 
     pygame.init()
     pygame.font.init()
 
     pygame.mouse.set_visible(False)
 
-    screen = pygame.display.set_mode(DISPLAY)
-    manager = pygame_gui.UIManager(DISPLAY)
+    screen = pygame.display.set_mode(SCREEN_SIZE)
+    manager = pygame_gui.UIManager(SCREEN_SIZE)
     clock = pygame.time.Clock()
-    background = pygame.Surface(DISPLAY)
 
-    whitrabt = pygame.font.Font(dir + '/gui/whitrabt.ttf', 70)
-    oblivious = pygame.font.Font(dir + '/gui/ObliviousFont.ttf', 70)
+    display_surface = pygame.Surface(SCREEN_SIZE)
+    message_surface = pygame.Surface(MESSAGE_SIZE)
 
-    layout = GridLayout(pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 5, 4, 5)
+    root = os.path.dirname(os.path.abspath(__file__))
+
+    whitrabt = pygame.font.Font(root + '/gui/whitrabt.ttf', 70)
+    oblivious = pygame.font.Font(root + '/gui/ObliviousFont.ttf', 70)
+
+    layout = GridLayout(pygame.Rect(SCREEN_POSITION, SCREEN_SIZE), 5, 4, 5)
 
     # =============================================================
 
@@ -49,6 +58,7 @@ if __name__ == "__main__":
     # =============================================================
 
     close_button = pygame_gui.elements.UIButton(layout.get(3, 3), "Close", manager)
+    show_button = pygame_gui.elements.UIButton(layout.get(3, 2), "Show", manager)
 
     # =============================================================
 
@@ -56,18 +66,26 @@ if __name__ == "__main__":
     warning_text = whitrabt.render("Warning.", True, YELLOW_COLOR)
     success_text = whitrabt.render("Success.", True, GREEN_COLOR)
 
-    chevron_top_surface = draw_chevron(SCREEN_WIDTH, SCREEN_HEIGHT, 20, YELLOW_COLOR)
-    chevron_bottom_surface = draw_chevron(SCREEN_WIDTH, SCREEN_HEIGHT, 20, YELLOW_COLOR)
+    message_color = GREEN_COLOR
+
+    chevron_top_surface = draw_chevron(MESSAGE_WIDTH, MESSAGE_HEIGHT, 20, message_color)
+    chevron_bottom_surface = draw_chevron(MESSAGE_WIDTH, MESSAGE_HEIGHT, 20, message_color)
+
+    message_surface.blit(chevron_top_surface, (-20, 4))
+    message_surface.blit(chevron_bottom_surface, (-20, MESSAGE_HEIGHT - 40 - 4))
+    message_surface.blit(success_text, (10, 70))
+
+    pygame.draw.rect(message_surface, message_color, ((0,0), MESSAGE_SIZE), 1),
 
     # =============================================================
 
-    hal_outer_sprite = pygame.image.load(dir + '/../assets/img/1280px-HAL9000-outer.bmp')
+    hal_outer_sprite = pygame.image.load(root + '/../assets/img/1280px-HAL9000-outer.bmp')
     hal_outer_sprite.convert()
 
     hal_outer_sprite = pygame.transform.rotate(hal_outer_sprite, -90)
     hal_outer_sprite = pygame.transform.smoothscale(hal_outer_sprite, (400, 400))
 
-    hal_inner_sprite = pygame.image.load(dir + '/../assets/img/1280px-HAL9000-inner.bmp')
+    hal_inner_sprite = pygame.image.load(root + '/../assets/img/1280px-HAL9000-inner.bmp')
     hal_inner_sprite.convert()
 
     hal_inner_sprite = pygame.transform.rotate(hal_inner_sprite, -90)
@@ -83,27 +101,34 @@ if __name__ == "__main__":
 # =============================================================
 
     is_running = True
+    show_message = True
 
     while is_running:
         time_delta = clock.tick(60)/1000.0
         
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: # or event.type == 1792:
+            if event.type == 1792 and show_message:
+                show_message = False
+
+            if event.type == pygame.QUIT:
                 is_running = False
+
             manager.process_events(event)
 
-        manager.update(time_delta)
-
-        #screen.blit(background, (0, 0))
-
-        screen.blit(chevron_top_surface, (-20, 0))
-        screen.blit(chevron_bottom_surface, (-20, SCREEN_HEIGHT - 40))
-        screen.blit(warning_text, (10, 70))
-
-        manager.draw_ui(screen)
+        screen.blit(display_surface, SCREEN_POSITION)
 
         if close_button.check_pressed():
             is_running = False
+
+        if show_button.check_pressed():
+            show_message = True
+
+        manager.update(time_delta)
+
+        manager.draw_ui(screen)
+
+        if show_message:
+            screen.blit(message_surface, MESSAGE_POSITION)
 
         # window_surface.blit(hal_outer_sprite, (200, 40))
         # window_surface.blit(hal_inner_sprite, (x, y))
