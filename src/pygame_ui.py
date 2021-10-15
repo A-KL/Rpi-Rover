@@ -69,7 +69,6 @@ if __name__ == "__main__":
 
     pygame.init()
     pygame.font.init()
-
     pygame.mouse.set_visible(False)
 
     root = os.path.dirname(os.path.abspath(__file__))
@@ -80,8 +79,9 @@ if __name__ == "__main__":
     display_surface = pygame.Surface(SCREEN_SIZE)
     message_surface = pygame.Surface(MESSAGE_SIZE)
 
-    whitrabt = pygame.font.Font(root + '/../assets/fonts/whitrabt.ttf', 70)
-    oblivious = pygame.font.Font(root + '/../assets/fonts/ObliviousFont.ttf', 70)
+    whitrabt_70 = pygame.font.Font(root + '/../assets/fonts/whitrabt.ttf', 70)
+    whitrabt_20 = pygame.font.Font(root + '/../assets/fonts/whitrabt.ttf', 20)
+    oblivious_70 = pygame.font.Font(root + '/../assets/fonts/ObliviousFont.ttf', 70)
 
     layout = GridLayout(pygame.Rect(SCREEN_POSITION, SCREEN_SIZE), 5, 4, 5)
 
@@ -112,16 +112,13 @@ if __name__ == "__main__":
     # =============================================================
 
     close_button = pygame_gui.elements.UIButton(layout.get(3, 3), "Close", manager)
-    close_button.normal_bg = (20, 20, 20, 50)
-    close_button.hovered_bg = (20, 20, 20, 150)
-    close_button.active_bg = "#FF0038"
     show_button = pygame_gui.elements.UIButton(layout.get(3, 2), "Show", manager)
 
     # =============================================================
 
-    error_text = whitrabt.render("Error.", True, PRIMARY_COLOR)
-    warning_text = whitrabt.render("Warning.", True, YELLOW_COLOR)
-    success_text = whitrabt.render("Success.", True, GREEN_COLOR)
+    error_text = whitrabt_70.render("Error.", True, PRIMARY_COLOR)
+    warning_text = whitrabt_70.render("Warning.", True, YELLOW_COLOR)
+    success_text = oblivious_70.render("Success.", True, GREEN_COLOR)
 
     message_color = GREEN_COLOR
 
@@ -136,24 +133,24 @@ if __name__ == "__main__":
 
     # =============================================================
 
-    hal_outer_sprite = pygame.image.load(root + '/../assets/img/1280px-HAL9000-outer.bmp')
-    hal_outer_sprite.convert()
+    # hal_outer_sprite = pygame.image.load(root + '/../assets/img/1280px-HAL9000-outer.bmp')
+    # hal_outer_sprite.convert()
 
-    hal_outer_sprite = pygame.transform.rotate(hal_outer_sprite, -90)
-    hal_outer_sprite = pygame.transform.smoothscale(hal_outer_sprite, (400, 400))
+    # hal_outer_sprite = pygame.transform.rotate(hal_outer_sprite, -90)
+    # hal_outer_sprite = pygame.transform.smoothscale(hal_outer_sprite, (400, 400))
 
-    hal_inner_sprite = pygame.image.load(root + '/../assets/img/1280px-HAL9000-inner.bmp')
-    hal_inner_sprite.convert()
+    # hal_inner_sprite = pygame.image.load(root + '/../assets/img/1280px-HAL9000-inner.bmp')
+    # hal_inner_sprite.convert()
 
-    hal_inner_sprite = pygame.transform.rotate(hal_inner_sprite, -90)
-    w = int(908/3)
-    h = int(860/3)
-    x = int((800 - w ) / 2)
-    y = int((480 - h ) / 2)
-    hal_inner_sprite = pygame.transform.smoothscale(hal_inner_sprite, (w, h))
+    # hal_inner_sprite = pygame.transform.rotate(hal_inner_sprite, -90)
+    # w = int(908/3)
+    # h = int(860/3)
+    # x = int((800 - w ) / 2)
+    # y = int((480 - h ) / 2)
+    # hal_inner_sprite = pygame.transform.smoothscale(hal_inner_sprite, (w, h))
 
-    alpha = 0
-    step = 15
+    # alpha = 0
+    # step = 15
 
 # =============================================================
 
@@ -172,7 +169,7 @@ if __name__ == "__main__":
 
             manager.process_events(event)
 
-        draw_next_frame(display_surface, cap, SCREEN_POSITION, 30)
+        draw_next_frame(display_surface, cap, SCREEN_POSITION, 40)
 
         screen.blit(display_surface, SCREEN_POSITION)
 
