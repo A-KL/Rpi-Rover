@@ -1,4 +1,5 @@
 import os
+import cv2
 import pygame
 import pygame_gui
 import pygame_gui.elements
@@ -50,9 +51,18 @@ def draw_message_box(surface: pygame.Surface, font: pygame.font.Font, message, d
 
     pygame.draw.rect(surface, color, ((0,0), MESSAGE_SIZE), 1),
 
+def draw_next_frame(surface: pygame.Surface, cap: cv2.VideoCapture, position :Tuple[float, float] , alpha :int):
+    success, img = cap.read()
+
+    if success:
+        shape = img.shape[1::-1]
+        frame = pygame.image.frombuffer(img.tobytes(), shape, "BGR")
+        frame.set_alpha(alpha)
+        surface.blit(frame, position)
+    else:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
 if __name__ == "__main__":    
-
-
     PRIMARY_COLOR = (255, 0, 56)
     GREEN_COLOR = (0, 255, 0)
     YELLOW_COLOR = (255, 204, 0)
@@ -75,10 +85,15 @@ if __name__ == "__main__":
 
     layout = GridLayout(pygame.Rect(SCREEN_POSITION, SCREEN_SIZE), 5, 4, 5)
 
-    # =============================================================
+    # ============================================================= 
+    cap = cv2.VideoCapture(root + '/../assets/img/Old TV Static.mp4')
+    if not cap.isOpened():
+        raise NameError('Can not open background video file.')
+    
     background_image = pygame.image.load(root + '/../assets/img/background.jpg')
     background_image.convert()
     background_image.set_alpha(80)
+
     display_surface.blit(background_image, SCREEN_POSITION)
     # =============================================================
 
@@ -156,6 +171,8 @@ if __name__ == "__main__":
                 is_running = False
 
             manager.process_events(event)
+
+        draw_next_frame(display_surface, cap, SCREEN_POSITION, 30)
 
         screen.blit(display_surface, SCREEN_POSITION)
 
