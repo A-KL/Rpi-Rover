@@ -90,7 +90,7 @@ if __name__ == "__main__":
     if not cap.isOpened():
         raise NameError('Can not open background video file.')
     
-    background_image = pygame.image.load(root + '/../assets/img/background.jpg')
+    background_image = pygame.image.load(root + '/../assets/img/background.bmp')
     background_image.convert()
     background_image.set_alpha(80)
 
