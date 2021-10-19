@@ -3,7 +3,7 @@ import math
 import time
 
 import config_module as config
-import steering_module as steering
+import steering_service as steering
 
 import modules.xbox_module as xbox
 import modules.mqtt_module as mqtt

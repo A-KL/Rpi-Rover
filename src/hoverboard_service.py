@@ -1,10 +1,6 @@
-import time
 import serial
-import board
-import busio
-import itertools
-from itertools import chain
-import config_module as config
+import sys
+import json
 
 import modules.mqtt_module as mqtt
 import modules.motor_control_module as dc_module
@@ -17,12 +13,12 @@ def encode_message(x, y):
 
     return [0xAAAA, speed, steer, crc]
 
-def on_message(client, userdata, message):
-    channel = int(message.topic.split("/")[2])
-    value = int(message.payload.decode("utf-8"))
+# def on_message(client, userdata, message):
+#     channel = int(message.topic.split("/")[2])
+#     value = int(message.payload.decode("utf-8"))
 
-    command = encode_message(0.5, 0.4)
-    uart.write(command)
+#     command = encode_message(0.5, 0.4)
+#     uart.write(command)
 
     # print(f"Channel:{channel} {value}")
 
@@ -32,13 +28,6 @@ def on_message(client, userdata, message):
     #     print(error)
 
 if __name__ == "__main__":
-    command = encode_message(0.5, 0.4)
-    command = map(lambda x: x.to_bytes(2, 'little'), command)
-    command = chain.from_iterable(command)
-    command = list(command)
-
-    print (command)
-    exit()
 
     uart = serial.Serial(
             port='/dev/ttyS0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
@@ -48,10 +37,19 @@ if __name__ == "__main__":
             bytesize=serial.EIGHTBITS,
             timeout=1)
 
-    client = mqtt.Create(config.motors_topic, on_message)
+    uart.open()
 
     print("Hoverboard motors service ready")
 
-    client.loop_forever()
+    for line in sys.stdin:
+        message = json.loads(line)
+        x = float(message["x"])
+        y = float(message["y"])
+        # sender = float(message["sender"])
+        command = encode_message(x, y)
+        uart.write(command)
+
+    # client = mqtt.Create(config.motors_topic, on_message)
+    # client.loop_forever()
 
     print("Hoverboard motors service stopped")    

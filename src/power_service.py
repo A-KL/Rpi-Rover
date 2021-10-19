@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     client.publish(config.power_logic_topic, json.dumps(jobject))
 
-    voltage, current, power, shunt_voltage = power_sensor.read(1)
-    jobject = { "v" : voltage, "i" : current, "p" : power, "sv" :  shunt_voltage}
+    # voltage, current, power, shunt_voltage = power_sensor.read(1)
+    # jobject = { "v" : voltage, "i" : current, "p" : power, "sv" :  shunt_voltage}
 
-    client.publish(config.power_main_topic, json.dumps(jobject))
+    # client.publish(config.power_main_topic, json.dumps(jobject))

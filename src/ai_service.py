@@ -1,6 +1,6 @@
 import json
 import time
-import steering_module as steering
+import steering_service as steering
 import modules.mqtt_module as mqtt
 import config_module as config
 
@@ -44,6 +44,7 @@ def on_message(client, userdata, message):
                 w = obj['w']
                 h = obj['h']
                 on_person(x, y, w, h)
+
     elif message.topic == "rover/ai-service/enabled":
         client.publish(config.servo_3_topic, 70)
         time.sleep(1)
