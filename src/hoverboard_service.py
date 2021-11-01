@@ -29,27 +29,27 @@ def encode_message(x, y):
 
 if __name__ == "__main__":
 
-    uart = serial.Serial(
+     with serial.Serial(
             port='/dev/ttyS0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
             baudrate = 19200,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS,
-            timeout=1)
+            timeout=1) as uart:
+            
+        uart.open()
 
-    uart.open()
+        print("Hoverboard motors service ready")
 
-    print("Hoverboard motors service ready")
+        for line in sys.stdin:
+            message = json.loads(line)
+            x = float(message["x"])
+            y = float(message["y"])
+            # sender = float(message["sender"])
+            command = encode_message(x, y)
+            uart.write(command)
 
-    for line in sys.stdin:
-        message = json.loads(line)
-        x = float(message["x"])
-        y = float(message["y"])
-        # sender = float(message["sender"])
-        command = encode_message(x, y)
-        uart.write(command)
+        # client = mqtt.Create(config.motors_topic, on_message)
+        # client.loop_forever()
 
-    # client = mqtt.Create(config.motors_topic, on_message)
-    # client.loop_forever()
-
-    print("Hoverboard motors service stopped")    
+        print("Hoverboard motors service stopped")    

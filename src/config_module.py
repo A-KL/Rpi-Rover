@@ -7,11 +7,15 @@ servo_2_topic = "rover/pwm/2/angle"
 servo_3_topic = "rover/pwm/3/angle"
 
 # Steering #
-steering_sub = "rover/steering/+"
+steering_x_topic = "rover/steering/+"
 
-steering_topic = "rover/steering"
-steering_x_topic = "rover/steering/x"
-steering_y_topic = "rover/steering/y"
+steering_0_topic = "rover/steering/0"
+steering_0_x_topic = "rover/steering/0/x"
+steering_0_y_topic = "rover/steering/0/y"
+
+steering_1_topic = "rover/steering/1"
+steering_1_x_topic = "rover/steering/1/x"
+steering_1_y_topic = "rover/steering/1/y"
 
 # MOTOR+ENC Unit #
 encoders_topic_template = "rover/encoders/"

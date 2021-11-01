@@ -31,8 +31,6 @@ def updateMotors(client, x, y):
     motor_a = wheel(y + x)
     motor_b = wheel(y - x)
 
-    client.publish(config.steering_topic, json.dumps({ "x" : x, "y": y, "source":__name__ })) 
-
     client.publish(config.motor_a, int(motor_a))
     client.publish(config.motor_b, int(motor_b))
 
