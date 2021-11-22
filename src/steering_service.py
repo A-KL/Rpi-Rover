@@ -1,4 +1,3 @@
-import json
 import modules.mqtt_module as mqtt
 import config_module as config
 
@@ -34,3 +33,14 @@ def updateMotors(client, x, y):
     client.publish(config.motor_a, int(motor_a))
     client.publish(config.motor_b, int(motor_b))
 
+def on_message(client, userdata, message):
+
+    if message.topic == config.steering_0_topic:
+        updateMotors(client, message.payload.x, message.payload.y)
+
+    if message.topic == config.steering_1_topic:
+        updateServos(client, message.payload.x, message.payload.y)
+
+if __name__ == "__main__":
+    client = mqtt.Create(config.steering_x_topic, on_message)
+    client.loop_forever()

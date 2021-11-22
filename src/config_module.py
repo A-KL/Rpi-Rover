@@ -49,6 +49,10 @@ power_main_topic = "rover/power/main"
 power_logic_topic = "rover/power/logic"
 power_ups_topic = "rover/power/ups"
 
+power_1_topic = "rover/power/1"
+power_2_topic = "rover/power/2"
+power_3_topic = "rover/power/3"
+
 # Camera #
 control_camera_topic = "rover/control/camera" 
 control_rover_topic = "rover/control/rover" 

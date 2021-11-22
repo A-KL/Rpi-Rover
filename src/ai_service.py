@@ -35,7 +35,7 @@ def on_message(client, userdata, message):
     print(raw)
 
     if message.topic == config.machine_vision_objects:
-        objects = json.loads(message.payload.decode("utf-8"))
+        objects = json.loads(raw)
         for obj in objects:
             index = obj['classid']
             if index == 14:

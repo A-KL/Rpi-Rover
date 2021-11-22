@@ -1,12 +1,8 @@
-import sys
-import math
 import time
 import json
 import os
 
 import config_module as config
-import steering_service as steering
-
 import modules.xbox_module as xbox
 import modules.mqtt_module as mqtt
 
@@ -26,9 +22,6 @@ def awaitXboxJoystick():
 
 if __name__ == '__main__':
     client = mqtt.Create()
-
-    steering.updateMotors(client, current_motors_x, current_motors_y)
-    steering.updateServos(client, current_servos_x, current_servos_y)
 
     print("Awaiting Xbox Controller..")
     
@@ -52,7 +45,6 @@ if __name__ == '__main__':
                 client.publish(config.steering_1_topic, json.dumps({ "x" : current_servos_x, "y": current_servos_y, "source":os.path.basename(__file__)}))
                 client.publish(config.steering_1_x_topic, current_servos_x) 
                 client.publish(config.steering_1_y_topic, current_servos_y) 
-                steering.updateServos(client, current_servos_x, current_servos_y)
 
             if (y0 != current_motors_y or x0 != current_motors_x):
                 current_motors_x = x0
@@ -60,7 +52,6 @@ if __name__ == '__main__':
                 client.publish(config.steering_0_topic, json.dumps({ "x" : current_motors_x, "y": current_motors_y, "source":os.path.basename(__file__) }))
                 client.publish(config.steering_0_x_topic, current_motors_x) 
                 client.publish(config.steering_0_y_topic, current_motors_y) 
-                steering.updateMotors(client, current_motors_x, current_motors_y)
 
             time.sleep(0.1)
 
