@@ -31,7 +31,6 @@ def print_board_status():
     print("board status: unsupport board framware version")
 
 def on_message(client, userdata, message):
-
     channel = int(message.topic.split("/")[2])
     name = str(message.topic.split("/")[3])
     value = int(message.payload.decode("utf-8"))
@@ -39,7 +38,7 @@ def on_message(client, userdata, message):
     index = int(channel / 16)
     channel = channel % 16
 
-    print(f"Device:{index} Channel:{channel} {name}:{value}")
+    # print(f"Device:{index} Channel:{channel} {name}:{value}")
 
     # if (name == 'duty_cycle'):
     #     c = devices[index].channels[channel]
