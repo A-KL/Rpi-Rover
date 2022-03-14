@@ -6,10 +6,10 @@ def create_ina():
     ina0 = INA219(SHUNT_OHMS, address=0x40)
     ina0.configure(ina0.RANGE_16V)
 
-    ina1 = INA219(SHUNT_OHMS, address=0x41)
-    ina1.configure(ina1.RANGE_16V)
+    # ina1 = INA219(SHUNT_OHMS, address=0x41)
+    # ina1.configure(ina1.RANGE_16V)
 
-    return [ina0, ina1]
+    return [ina0] #, ina1
 
 devices = create_ina()
 

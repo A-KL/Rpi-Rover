@@ -169,7 +169,7 @@ if __name__ == "__main__":
 
             manager.process_events(event)
 
-        draw_next_frame(display_surface, cap, SCREEN_POSITION, 40)
+        # draw_next_frame(display_surface, cap, SCREEN_POSITION, 40)
 
         screen.blit(display_surface, SCREEN_POSITION)
 

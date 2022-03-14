@@ -7,10 +7,15 @@ servo_2_topic = "rover/pwm/2/angle"
 servo_3_topic = "rover/pwm/3/angle"
 
 # Steering #
-steering_sub = "rover/steering/+"
+steering_x_topic = "rover/steering/+"
 
-steering_x_topic = "rover/steering/x"
-steering_y_topic = "rover/steering/y"
+steering_0_topic = "rover/steering/0"
+steering_0_x_topic = "rover/steering/0/x"
+steering_0_y_topic = "rover/steering/0/y"
+
+steering_1_topic = "rover/steering/1"
+steering_1_x_topic = "rover/steering/1/x"
+steering_1_y_topic = "rover/steering/1/y"
 
 # MOTOR+ENC Unit #
 encoders_topic_template = "rover/encoders/"
@@ -43,6 +48,10 @@ lcd_line_2 = "rover/lcd/lines/2"
 power_main_topic = "rover/power/main"
 power_logic_topic = "rover/power/logic"
 power_ups_topic = "rover/power/ups"
+
+power_1_topic = "rover/power/1"
+power_2_topic = "rover/power/2"
+power_3_topic = "rover/power/3"
 
 # Camera #
 control_camera_topic = "rover/control/camera" 

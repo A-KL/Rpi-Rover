@@ -29,7 +29,7 @@ def create_pca(i2c, address):
     pca.frequency = 50
     return pca
 
-devices = [create_pca(i2c, 0x42), create_pca(i2c, 0x43)]
+devices = [create_pca(i2c, 0x42)] #, create_pca(i2c, 0x43)
 
 def on_message(client, userdata, message):
     channel = int(message.topic.split("/")[2])
@@ -38,11 +38,10 @@ def on_message(client, userdata, message):
     index = int(channel / 16)
     channel = channel % 16
 
-    print(f"Device:{index} Channel:{channel} {name}:{value}")
+    # print(f"Device:{index} Channel:{channel} {name}:{value}")
 
     if (name == 'duty_cycle'):
         c = devices[index].channels[channel]
-        # c = pca.channels[channel]
         c.duty_cycle = value
     elif (name == 'angle'):
         s = servo.Servo(devices[index].channels[channel], min_pulse=600, max_pulse=2600)
