@@ -60,3 +60,4 @@ if __name__ == "__main__":
     client.on_message = on_message
     client.subscribe([("rover/ai-service/enabled",0),(config.machine_vision_objects,0)])
     client.loop_forever()
+
