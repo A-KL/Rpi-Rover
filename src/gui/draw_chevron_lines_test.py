@@ -1,3 +1,6 @@
+import os
+from os.path import join
+
 import pygame
 from pygame import *
 
@@ -32,7 +35,8 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(DISPLAY)	
     screen.fill(pygame.Color('#000000'))
 
-    font = pygame.font.Font('/home/pi/projects/Rover/src/gui/whitrabt.ttf', 70)
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    font = pygame.font.Font(join(current_path, 'whitrabt.ttf'), 70)
     font_color = (255, 0, 56)
 
     text0 = font.render("Error!", True, font_color)
