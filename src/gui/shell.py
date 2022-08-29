@@ -13,61 +13,73 @@ LightYellow = Color(255, 255, 0)
 Black = Color(0, 0, 0)
 DarkGray = Color(30, 30, 30)
 
-def draw_tile(surface, title, value, footer, font_path, pimary_color = LightGreen, background_color = Black):
-    
-    # Background
-    width = surface.get_width()
-    height = surface.get_height()
-    body_height = height * 0.74
-    footer_height = height - body_height
+class TileUI:
 
-    pygame.draw.rect(surface, pimary_color, (0, 0, width, body_height))
+    def __init__(self, width, height, title, value, footer, font_path, pimary_color = DarkGray, background_color = Black):
+        self.surface = Surface((width, height))
+        self.title = title
+        self.value = value
+        self.footer = footer
+        self.font_path = font_path
+        self.pimary_color = pimary_color
+        self.background_color = background_color
+        self.value_place_holder = "0"
+        self.value_place_holder_size = 0
 
-    pygame.draw.rect(surface, background_color, (0, 0 + body_height, width, footer_height))
+    def update(self):
+        # Background
+        width = self.surface.get_width()
+        height = self.surface.get_height()
+        body_height = height * 0.74
+        footer_height = height - body_height
 
-    colors = [pimary_color, background_color]
-    color_index = 0
+        pygame.draw.rect(self.surface, self.pimary_color, (0, 0, width, body_height))
 
-    for w in [0, 7]:
-        pygame.draw.polygon(surface, colors[color_index], (
-                (0 + w, body_height + footer_height / 2),
-                (0 + w, body_height + w),
-                (width - w, body_height + w),
-                (width - w, height - w),
-                (footer_height / 2, height - w)
+        pygame.draw.rect(self.surface, self.background_color, (0, 0 + body_height, width, footer_height))
+
+        colors = [self.pimary_color, self.background_color]
+        color_index = 0
+
+        for w in [0, 7]:
+            pygame.draw.polygon(self.surface, colors[color_index], (
+                    (0 + w, body_height + footer_height / 2),
+                    (0 + w, body_height + w),
+                    (width - w, body_height + w),
+                    (width - w, height - w),
+                    (footer_height / 2, height - w)
+                )
             )
-        )
-        color_index += 1
+            color_index += 1
 
-    # Text
+        # Text
 
-    font_big = pygame.font.Font(font_path, 60)
-    font_small = pygame.font.Font(font_path, 34)
+        font_big = pygame.font.Font(self.font_path, int(width / 7))
+        font_small = pygame.font.Font(self.font_path, int(width / 14))
 
-    title_text = font_small.render(title, True, background_color)
-    main_text = font_big.render(value, True, background_color)
-    footer_text = font_small.render(footer, True, pimary_color)
+        title_text = font_small.render(self.title, True, self.background_color)
+        main_text = font_big.render(self.value, True, self.background_color)
+        footer_text = font_small.render(self.footer, True, self.pimary_color)
 
-    padding = title_text.get_height()
+        padding = title_text.get_height()
 
-    value_len = len(value)
-    place_holder_size = 8
-    place_holder = "0"
-    h, s, v, a = pimary_color.hsva
-    place_holder_color = Color(0)
-    place_holder_color.hsva = (h, s, v * 0.75, a)
+        value_len = len(self.value)
+        h, s, v, a = self.pimary_color.hsva
+        place_holder_color = Color(0)
+        place_holder_color.hsva = (h, s, v * 0.75, a)
 
-    left = place_holder_size - value_len
-    if left > 0:
-        for x in range(1, left + 1):
-            place_holder_text = font_big.render(place_holder, True, place_holder_color)
-            surface.blit(place_holder_text, (width - padding  - main_text.get_width() - place_holder_text.get_width() * x, body_height - main_text.get_height() - padding))
+        left = self.value_place_holder_size - value_len
+        if left > 0:
+            for x in range(1, left + 1):
+                place_holder_text = font_big.render(self.value_place_holder, True, place_holder_color)
+                self.surface.blit(place_holder_text, (width - padding  - main_text.get_width() - place_holder_text.get_width() * x, body_height - main_text.get_height() - padding))
 
-    surface.blit(title_text, (padding, padding))
+        self.surface.blit(title_text, (padding, padding))
 
-    surface.blit(main_text, (width - padding - main_text.get_width(), body_height - main_text.get_height() - padding))
+        self.surface.blit(main_text, (width - padding - main_text.get_width(), body_height - main_text.get_height() - padding))
 
-    surface.blit(footer_text, (width - padding - footer_text.get_width(), (footer_height - footer_text.get_height())/ 2 + body_height))
+        self.surface.blit(footer_text, (width - padding - footer_text.get_width(), (footer_height - footer_text.get_height())/ 2 + body_height))
+
+        return self.surface
 
 if __name__ == "__main__":
     pygame.init()
@@ -81,25 +93,35 @@ if __name__ == "__main__":
     screen.fill(pygame.Color('#000000'))
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
+    current_file = os.path.basename(__file__)
 
     is_running = True
 
-    tile_surface = Surface((450, 300))
-    tile_color = LightYellow
+    tiles = [
+        TileUI(225, 150, "main_power", "0.95a", current_file, join(current_dir, 'whitrabt.ttf')),
+        TileUI(225, 150, "aux_power", "1.0a", current_file, join(current_dir, 'whitrabt.ttf')),
+        TileUI(225, 150, "state", "RUNNING", current_file, join(current_dir, 'whitrabt.ttf'))
+    ]
 
     while is_running:
-        draw_tile(tile_surface, "main_power", "0.95a", "current_sensor.py", join(current_dir, 'whitrabt.ttf'), tile_color)
 
-        tile_rect = screen.blit(tile_surface, (10, 10))
+        map = []
+
+        for index, tile in enumerate(tiles):
+            tile_surface = tile.update()
+            map.append(
+                (tile,  screen.blit(tile_surface, (10 * (index + 1) + tile_surface.get_width() * index, 10)))
+            )
 
         for event in pygame.event.get():
 
             if event.type == pygame.MOUSEBUTTONUP:
-                if tile_rect.collidepoint(pygame.mouse.get_pos()):
-                    if tile_color == LightGreen:
-                        tile_color = DarkGray
-                    else:
-                        tile_color = LightGreen
+                for tile, tile_rect in map:
+                    if tile_rect.collidepoint(pygame.mouse.get_pos()):
+                        if tile.pimary_color == LightGreen:
+                            tile.pimary_color = DarkGray
+                        else:
+                            tile.pimary_color = LightGreen
 
             if event.type == pygame.QUIT or event.type == 1792:
                 print(event)
