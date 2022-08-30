@@ -4,9 +4,11 @@ import pygame
 import pygame_gui
 import pygame_gui.elements
 
-from gui.UIStack import *
-from gui.GridLayout import *
-from gui.ui_helpers import *
+from os.path import join
+
+from gui.components.ui_stack import *
+from gui.components.ui_grid_layout import *
+from gui.components.ui_chevron import *
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 480
@@ -17,26 +19,6 @@ MESSAGE_WIDTH = 700
 MESSAGE_HEIGHT = 380
 MESSAGE_SIZE = (MESSAGE_WIDTH, MESSAGE_HEIGHT)
 MESSAGE_POSITION = ( (SCREEN_WIDTH - MESSAGE_WIDTH) / 2, (SCREEN_HEIGHT - MESSAGE_HEIGHT) / 2)
-
-def draw_chevron(screen_width, screen_height, thickness = 15, color = Color("Red")):
-    chevron_surface = Surface((screen_width + thickness *2, screen_height))
-    
-    start_x = 0
-    start_y = 0
-    width = thickness
-    shift_x = width * 2
-
-    color_a = color
-    color_b = Color("Black")
-
-    while start_x < screen_width + 100:
-        pygame.draw.lines(chevron_surface, color_a, False, ((start_x, start_y), (start_x + shift_x, start_y + shift_x)), width)
-        start_x = start_x + width
-
-        pygame.draw.lines(chevron_surface, color_b, False, ((start_x, start_y), (start_x+ shift_x, start_y + shift_x)), width)
-        start_x = start_x + width
-        
-    return chevron_surface
 
 def draw_message_box(surface: pygame.Surface, font: pygame.font.Font, message, description, color):
     caption = font.render(message, True, color)
@@ -73,40 +55,42 @@ if __name__ == "__main__":
 
     root = os.path.dirname(os.path.abspath(__file__))
     screen = pygame.display.set_mode(SCREEN_SIZE)
-    manager = pygame_gui.UIManager(SCREEN_SIZE, root + '/gui/base_theme.json')
+    manager = pygame_gui.UIManager(SCREEN_SIZE, join(root, 'gui', 'base_theme.json'))
     clock = pygame.time.Clock()
 
     display_surface = pygame.Surface(SCREEN_SIZE)
     message_surface = pygame.Surface(MESSAGE_SIZE)
 
-    whitrabt_70 = pygame.font.Font(root + '/../assets/fonts/whitrabt.ttf', 70)
-    whitrabt_20 = pygame.font.Font(root + '/../assets/fonts/whitrabt.ttf', 20)
-    oblivious_70 = pygame.font.Font(root + '/../assets/fonts/ObliviousFont.ttf', 70)
+    font_path = join(root, '..', 'assets', 'fonts', 'whitrabt.ttf')
 
-    layout = GridLayout(pygame.Rect(SCREEN_POSITION, SCREEN_SIZE), 5, 4, 5)
+    whitrabt_70 = pygame.font.Font(font_path, 70)
+    whitrabt_20 = pygame.font.Font(font_path, 20)
+    oblivious_70 = pygame.font.Font(join(root, '..', 'assets', 'fonts', 'ObliviousFont.ttf'), 70)
+
+    layout = UIGridLayout(pygame.Rect(SCREEN_POSITION, SCREEN_SIZE), 5, 4, 5)
 
     # ============================================================= 
-    cap = cv2.VideoCapture(root + '/../assets/img/Old TV Static.mp4')
+    cap = cv2.VideoCapture(join(root, '..', 'assets', 'img', 'Old TV Static.mp4'))
     if not cap.isOpened():
         raise NameError('Can not open background video file.')
     
-    background_image = pygame.image.load(root + '/../assets/img/background.bmp')
+    background_image = pygame.image.load(join(root, '..', 'assets', 'img', 'background.bmp'))
     background_image.convert()
     background_image.set_alpha(80)
 
     display_surface.blit(background_image, SCREEN_POSITION)
     # =============================================================
 
-    logic_v = UIStack(layout.get(2, 0), 2, manager) # 200 / 80
+    logic_v = UIStack(layout.get(2, 0), 2, manager, font_path) # 200 / 80
     logic_v.tmp_init(0, 6, 5.14, 'V', 'logic')
 
-    logic_i = UIStack(layout.get(2, 1), 2, manager)
+    logic_i = UIStack(layout.get(2, 1), 2, manager, font_path)
     logic_i.tmp_init(0, 4, 2.14, 'I', 'logic')
 
-    main_v = UIStack(layout.get(2, 2), 2, manager)
+    main_v = UIStack(layout.get(2, 2), 2, manager, font_path)
     main_v.tmp_init(0, 16, 11.01, 'V', 'main')
 
-    main_i = UIStack(layout.get(2, 3), 2, manager)
+    main_i = UIStack(layout.get(2, 3), 2, manager, font_path)
     main_i.tmp_init(0, 4, 1.04, 'I', 'main')
 
     # =============================================================

@@ -30,16 +30,36 @@ if __name__ == "__main__":
     LightGreenTileStyle = UITileStyle(LightGreen, Black, LightGreen)
     LightGreenTileTextStyle = UITileTextStyle(font_path, Black, LightGreen)
 
+    LightYellowTileStyle = UITileStyle(LightYellow, Black, LightYellow)
+    LightYellowTileTextStyle = UITileTextStyle(font_path, Black, LightYellow)
+
+    LightRedTileStyle = UITileStyle(LightRed, Black, LightRed)
+    LightRedTileTextStyle = UITileTextStyle(font_path, Black, LightRed)
+
+    SolidLightRedTileStyle = UITileStyle(DarkGray, LightRed, LightRed)
+    SolidLightRedTileTextStyle = UITileTextStyle(font_path, LightRed, Black)
+
     tiles = [
         UITile(225, 150, "main_power", "0.95a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
-        UITile(225, 150, "aux_power", "1.0a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
-        UITile(225, 150, "state", "RUNNING", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle)
+        UITile(225, 150, "12/08/2023", "1.0a", current_file, SolidLightRedTileStyle, SolidLightRedTileTextStyle),
+        UITile(225, 150, "state", "RUNNING", current_file, LightRedTileStyle, LightRedTileTextStyle),
+
+        UITile(225, 150, "main_power", "0.95a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
+        UITile(225, 150, "aux_power", "1.0a", current_file, LightYellowTileStyle, LightYellowTileTextStyle),
+        UITile(225, 150, "192.168.1.1", "STOP", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle)        
     ]
 
     while is_running:
 
-        for index, tile in enumerate(tiles):
-            tile.blit(screen, (10 * (index + 1) + tile.surface.get_width() * index, 10))
+        for y in range(0, 2):
+            for x in range(0, 3):
+                tile = tiles[y * 3 + x]
+                tile.blit(screen, 
+                    (
+                        10 * (x + 1) + tile.surface.get_width() * x,
+                        10 * (y + 1) + tile.surface.get_height() * y
+                    )
+                )
 
         for event in pygame.event.get():
 

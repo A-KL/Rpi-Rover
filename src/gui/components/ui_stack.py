@@ -1,5 +1,4 @@
 from typing import Union, Dict, Tuple
-import os
 import pygame
 
 from pygame_gui.core import ObjectID
@@ -16,6 +15,7 @@ class UIStack(UIPanel):
                  relative_rect: pygame.Rect,
                  starting_layer_height: int,
                  manager: IUIManagerInterface,
+                 font_path: str,
                  *,
                  element_id: str = 'stack',
                  margins: Dict[str, int] = None,
@@ -56,7 +56,7 @@ class UIStack(UIPanel):
         # self.rebuild_from_changed_theme_data()
         
         # Temp
-        self.font = 'whitrabt.ttf'
+        self.font_path = font_path
         self.min = 0
         self.max = 100
         self.value = 100
@@ -109,10 +109,8 @@ class UIStack(UIPanel):
         
         # Temp
         
-        dir = os.path.dirname(os.path.abspath(__file__))
-        
-        big_font = pygame.font.Font(os.path.join(dir, self.font), 36)
-        small_font = pygame.font.Font(os.path.join(dir, self.font), 18)
+        big_font = pygame.font.Font(self.font_path, 36)
+        small_font = pygame.font.Font(self.font_path, 18)
         
         main_label = big_font.render(str(self.value), False, self.decoration_colour)        
         units_label = small_font.render(self.units, False, self.decoration_colour)

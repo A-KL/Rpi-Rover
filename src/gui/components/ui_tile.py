@@ -1,4 +1,3 @@
-import string
 import pygame
 from pygame import *
 
@@ -11,7 +10,7 @@ class UITileStyle:
 
 class UITileTextStyle:
 
-    def __init__(self, font_path: string, color: Color, footer_color: Color, body_placeholder: string = "0", body_placeholder_size: int = 0):
+    def __init__(self, font_path: str, color: Color, footer_color: Color, body_placeholder: str = "0", body_placeholder_size: int = 0):
         self.font_path = font_path
         self.color = color
         self.footer_color = footer_color
@@ -20,7 +19,7 @@ class UITileTextStyle:
 
 class UITile:
 
-    def __init__(self, width: int, height: int, caption: string, text: string, footer: string, style: UITileStyle, text_style: UITileTextStyle):
+    def __init__(self, width: int, height: int, caption: str, text: str, footer: str, style: UITileStyle, text_style: UITileTextStyle):
         self.surface = Surface((width, height))
         self.caption = caption
         self.text = text
@@ -37,7 +36,7 @@ class UITile:
         self.rect = screen.blit(self.update(), dest)
 
 
-def pygame_ui_draw_tile(surface: Surface, caption: string, text: string, footer: string, style: UITileStyle, text_style: UITileTextStyle):    
+def pygame_ui_draw_tile(surface: Surface, caption: str, text: str, footer: str, style: UITileStyle, text_style: UITileTextStyle):    
     width = surface.get_width()
     height = surface.get_height()
 
@@ -50,7 +49,7 @@ def pygame_ui_draw_tile(surface: Surface, caption: string, text: string, footer:
     # Footer
     colors = [
         (0, style.footer_border_color), 
-        (7, style.footer_color)
+        (5, style.footer_color)
     ]
 
     for w, color in colors:
