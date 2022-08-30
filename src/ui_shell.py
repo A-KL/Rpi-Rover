@@ -4,6 +4,9 @@ import os
 from os import listdir
 from os.path import isfile, join
 
+from gui.components.ui_tile import *
+from  gui.components.ui_colors import *
+
 import subprocess
 
 class Runnable:
@@ -46,17 +49,29 @@ class Runnable:
             return 0
         return self.process.returncode
 
+def active(filter:str):
+    if  os.name == 'nt':
+        import wmi
+        f = wmi.WMI()
+        for process in f.Win32_Process():
+            if process.CommandLine is not None and process.CommandLine.endswith(filter):
+                yield (process.ProcessId, process.Name, process.CommandLine)
+            
+
 def has_extension(fileName, extension) :
     return extension == os.path.splitext(fileName)[1]
 
-current_file = __file__
-current_path = os.path.dirname(os.path.abspath(__file__))
+for id, name, cmd in active(".py"):
+    print(f"{id:<10} {name} {cmd}")
 
-onlyfiles = [f for f in listdir(current_path) if (isfile(join(current_path, f)) and current_path != current_file and has_extension(f, ".py"))]
+# current_file = __file__
+# current_path = os.path.dirname(os.path.abspath(__file__))
 
-xbox_service = Runnable('python', join(current_path, 'xbox_service.py'))
-xbox_service.run()
-xbox_service.update()
-xbox_service.wait()
+# onlyfiles = [f for f in listdir(current_path) if (isfile(join(current_path, f)) and current_path != current_file and has_extension(f, ".py"))]
 
-print(onlyfiles)
+# xbox_service = Runnable('python', join(current_path, 'xbox_service.py'))
+# xbox_service.run()
+# xbox_service.update()
+# xbox_service.wait()
+
+# print(onlyfiles)
