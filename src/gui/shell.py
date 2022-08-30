@@ -38,19 +38,14 @@ if __name__ == "__main__":
 
     while is_running:
 
-        map = []
-
         for index, tile in enumerate(tiles):
-            tile_surface = tile.update()
-            map.append(
-                (tile,  screen.blit(tile_surface, (10 * (index + 1) + tile_surface.get_width() * index, 10)))
-            )
+            tile.blit(screen, (10 * (index + 1) + tile.surface.get_width() * index, 10))
 
         for event in pygame.event.get():
 
             if event.type == pygame.MOUSEBUTTONUP:
-                for tile, tile_rect in map:
-                    if tile_rect.collidepoint(pygame.mouse.get_pos()):
+                for tile in tiles:
+                    if tile.rect.collidepoint(pygame.mouse.get_pos()):
                         if tile.background == DarkGrayTileStyle:
                             tile.background = LightGreenTileStyle
                             tile.foreground = LightGreenTileTextStyle

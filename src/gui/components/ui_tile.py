@@ -33,6 +33,10 @@ class UITile:
 
         return self.surface
 
+    def blit(self, screen: Surface, dest):
+        self.rect = screen.blit(self.update(), dest)
+
+
 def pygame_ui_draw_tile(surface: Surface, caption: string, text: string, footer: string, style: UITileStyle, text_style: UITileTextStyle):    
     width = surface.get_width()
     height = surface.get_height()
