@@ -40,26 +40,33 @@ if __name__ == "__main__":
     SolidLightRedTileTextStyle = UITileTextStyle(font_path, LightRed, Black)
 
     tiles = [
-        UITile(225, 150, "main_power", "0.95a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
-        UITile(225, 150, "12/08/2023", "1.0a", current_file, SolidLightRedTileStyle, SolidLightRedTileTextStyle),
-        UITile(225, 150, "state", "RUNNING", current_file, LightRedTileStyle, LightRedTileTextStyle),
+        UITile(185, 120, "main_power", "0.95a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
+        UITile(185, 120, "12/08/2023", "1.0a", current_file, SolidLightRedTileStyle, SolidLightRedTileTextStyle),
+        UITile(185, 120, "state", "RUNNING", current_file, LightRedTileStyle, LightRedTileTextStyle),
 
-        UITile(225, 150, "main_power", "0.95a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
-        UITile(225, 150, "aux_power", "1.0a", current_file, LightYellowTileStyle, LightYellowTileTextStyle),
-        UITile(225, 150, "192.168.1.1", "STOP", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle)        
+        UITile(185, 120, "main_power", "0.95a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
+        UITile(185, 120, "aux_power", "1.0a", current_file, LightYellowTileStyle, LightYellowTileTextStyle),
+        UITile(185, 120, "192.168.1.1", "STOP", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle)      
     ]
+
+    columns = 4
+    rows = 2
+    padding = 12
 
     while is_running:
 
-        for y in range(0, 2):
-            for x in range(0, 3):
-                tile = tiles[y * 3 + x]
-                tile.blit(screen, 
-                    (
-                        10 * (x + 1) + tile.surface.get_width() * x,
-                        10 * (y + 1) + tile.surface.get_height() * y
-                    )
+      for y in range(0, rows):
+        for x in range(0, columns):
+            index = y * columns + x
+            if index>= len(tiles):
+                continue
+            tile = tiles[index]
+            tile.blit(screen, 
+                (
+                    padding * (x + 1) + tile.surface.get_width() * x,
+                    padding * (y + 1) + tile.surface.get_height() * y
                 )
+            )
 
         for event in pygame.event.get():
 

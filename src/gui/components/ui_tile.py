@@ -62,8 +62,8 @@ def pygame_ui_draw_tile(surface: Surface, caption: str, text: str, footer: str, 
 
     # Text
 
-    font_big = pygame.font.Font(text_style.font_path, int(width / 7))
-    font_small = pygame.font.Font(text_style.font_path, int(width / 14))
+    font_big = pygame.font.Font(text_style.font_path, int(width / 6))
+    font_small = pygame.font.Font(text_style.font_path, int(width / 13))
 
     caption_surface = font_small.render(caption, True, text_style.color)
     text_surface = font_big.render(text, True, text_style.color)
