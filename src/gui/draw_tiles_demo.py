@@ -24,29 +24,20 @@ if __name__ == "__main__":
 
     is_running = True
 
-    DarkGrayTileStyle = UITileStyle(DarkGray, Black, DarkGray)
-    DarkGrayTileTextStyle = UITileTextStyle(font_path, Black, DarkGray)
-
-    LightGreenTileStyle = UITileStyle(LightGreen, Black, LightGreen)
-    LightGreenTileTextStyle = UITileTextStyle(font_path, Black, LightGreen)
-
-    LightYellowTileStyle = UITileStyle(LightYellow, Black, LightYellow)
-    LightYellowTileTextStyle = UITileTextStyle(font_path, Black, LightYellow)
-
-    LightRedTileStyle = UITileStyle(LightRed, Black, LightRed)
-    LightRedTileTextStyle = UITileTextStyle(font_path, Black, LightRed)
-
-    SolidLightRedTileStyle = UITileStyle(DarkGray, LightRed, LightRed)
-    SolidLightRedTileTextStyle = UITileTextStyle(font_path, LightRed, Black)
+    DarkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, Black, DarkGray), UITileForegroundStyle(font_path, Black, DarkGray))
+    LightGreenTileStyle = UITileStyle(UITileBackgroundStyle(LightGreen, Black, LightGreen), UITileForegroundStyle(font_path, Black, LightGreen))
+    LightYellowTileStyle = UITileStyle(UITileBackgroundStyle(LightYellow, Black, LightYellow), UITileForegroundStyle(font_path, Black, LightYellow))
+    LightRedTileStyle = UITileStyle(UITileBackgroundStyle(LightRed, Black, LightRed), UITileForegroundStyle(font_path, Black, LightRed))
+    SolidLightRedTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, LightRed, LightRed), UITileForegroundStyle(font_path, LightRed, Black))
 
     tiles = [
-        UITile(185, 120, "main_power", "0.95a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
-        UITile(185, 120, "12/08/2023", "1.0a", current_file, SolidLightRedTileStyle, SolidLightRedTileTextStyle),
-        UITile(185, 120, "state", "RUNNING", current_file, LightRedTileStyle, LightRedTileTextStyle),
+        UITile(185, 120, "main_power", "0.95a", current_file, DarkGrayTileStyle),
+        UITile(185, 120, "12/08/2023", "1.0a", current_file, SolidLightRedTileStyle),
+        UITile(185, 120, "state", "RUNNING", current_file, LightRedTileStyle),
 
-        UITile(185, 120, "main_power", "0.95a", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle),
-        UITile(185, 120, "aux_power", "1.0a", current_file, LightYellowTileStyle, LightYellowTileTextStyle),
-        UITile(185, 120, "192.168.1.1", "STOP", current_file, DarkGrayTileStyle, DarkGrayTileTextStyle)      
+        UITile(185, 120, "main_power", "0.95a", current_file, DarkGrayTileStyle),
+        UITile(185, 120, "aux_power", "1.0a", current_file, LightYellowTileStyle),
+        UITile(185, 120, "192.168.1.1", "STOP", current_file, DarkGrayTileStyle)      
     ]
 
     columns = 4
@@ -73,12 +64,10 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEBUTTONUP:
                 for tile in tiles:
                     if tile.rect.collidepoint(pygame.mouse.get_pos()):
-                        if tile.background == DarkGrayTileStyle:
-                            tile.background = LightGreenTileStyle
-                            tile.foreground = LightGreenTileTextStyle
+                        if tile.style == DarkGrayTileStyle:
+                            tile.style = LightGreenTileStyle
                         else:
-                            tile.background = DarkGrayTileStyle
-                            tile.foreground = DarkGrayTileTextStyle
+                            tile.style = DarkGrayTileStyle
 
             if event.type == pygame.QUIT or event.type == 1792:
                 print(event)

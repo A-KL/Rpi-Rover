@@ -1,14 +1,14 @@
 import pygame
 from pygame import *
 
-class UITileStyle:
+class UITileBackgroundStyle:
 
     def __init__(self, color: Color, footer_color: Color, footer_border_color: Color):
         self.color = color
         self.footer_color = footer_color
         self.footer_border_color = footer_border_color 
 
-class UITileTextStyle:
+class UITileForegroundStyle:
 
     def __init__(self, font_path: str, color: Color, footer_color: Color, body_placeholder: str = "0", body_placeholder_size: int = 0):
         self.font_path = font_path
@@ -17,26 +17,36 @@ class UITileTextStyle:
         self.body_place_holder = body_placeholder
         self.body_place_holder_size = body_placeholder_size
 
+class UITileStyle:
+
+    def __init__(self, background: UITileBackgroundStyle, foreground: UITileForegroundStyle):
+        self.background = background
+        self.foreground = foreground
+
 class UITile:
 
-    def __init__(self, width: int, height: int, caption: str, text: str, footer: str, style: UITileStyle, text_style: UITileTextStyle):
+    def __init__(self, width: int, height: int, caption: str, text: str, footer: str, style: UITileStyle):
         self.surface = Surface((width, height))
         self.caption = caption
         self.text = text
         self.footer = footer
-        self.background = style
-        self.foreground = text_style
+        self.style = style
+        self.rect = None
 
     def update(self):
-        pygame_ui_draw_tile(self.surface, self.caption, self.text, self.footer, self.background, self.foreground)
-
+        pygame_ui_draw_tile(self.surface, self.caption, self.text, self.footer, self.style.background, self.style.foreground)
         return self.surface
+
+    def hit(self, position):
+        if self.rect == None:
+            return False
+        return self.rect.collidepoint(position)
 
     def blit(self, screen: Surface, dest):
         self.rect = screen.blit(self.update(), dest)
 
 
-def pygame_ui_draw_tile(surface: Surface, caption: str, text: str, footer: str, style: UITileStyle, text_style: UITileTextStyle):    
+def pygame_ui_draw_tile(surface: Surface, caption: str, text: str, footer: str, style: UITileBackgroundStyle, text_style: UITileForegroundStyle):    
     width = surface.get_width()
     height = surface.get_height()
 
