@@ -1,3 +1,4 @@
+from logging import handlers
 from math import fabs
 import os
 
@@ -10,108 +11,127 @@ from  gui.components.ui_colors import *
 
 import subprocess
 
-class RunnableContext:
-    def __init__(self):
-        self._lock = threading.Lock()
-        self.list = list()
-        self.active = True
-
-    def set_list(self, list):
-        self.list = list
-
-    def get_list(self):
-        return self.list
-
-    def is_active(self):
-        return self.active
-
-    def cancel(self):
-        self.active = False
-
-class RunnableWidget:
-    def __init__(self, shell: str, filePath: str, font_path: str):
-        self.process = None
-        self.filePath = filePath
-        self.shell = shell
-        self.darkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, Black, DarkGray), UITileForegroundStyle(font_path, Black, DarkGray))
-        self.lightGreenTileStyle = UITileStyle(UITileBackgroundStyle(LightGreen, Black, LightGreen), UITileForegroundStyle(font_path, Black, LightGreen))
-        self.tile = UITile(185, 120, "state", "IDLE", os.path.basename(filePath), self.darkGrayTileStyle)
-        
-    def hit(self, position):
-        return self.tile.hit(position)
-
-    def update(self, context: RunnableContext):
-        count = 0
-        for id, name, cmd in context.get_list():
-            if self.filePath in cmd:
-                count = count + 1
-
-        if count > 0:
-            self.tile.style = self.lightGreenTileStyle
-            self.tile.text = "RUNNING"
-            self.tile.caption = "instances:" + str(count)
-        else:
-            self.tile.style = self.darkGrayTileStyle
-            self.tile.text = "IDLE"
-            self.tile.caption = ""
-
-    def click(self):
-        pass
-
 class Runnable:
-
     def __init__(self, shell, fileName):
         self.process = None
+        self.pid = None
         self.fileName = fileName
         self.shell = shell
 
     def run(self):
-        if self.process == None:
+        if not self.running():
             self.process = subprocess.Popen([self.shell, self.fileName], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    def isRunning(self):
+    def running(self):
         if self.process == None:
             return False
         if self.process.poll() == None:
             return True
-        return True
-
-    def wait(self):
-        if self.process == None:
-            return
-        self.process.wait()
+        return False
 
     def update(self):
         if self.process == None:
             return        
         stdout_data, stderr_data = self.process.communicate()
         print(stdout_data)
-        print(stderr_data)
 
     def terminate(self):
-        if self.process == None:
+        if not self.running():
             return        
         self.process.terminate()
+        self.process.wait()
 
     def returncode(self):
         if self.process == None:
             return 0
         return self.process.returncode
 
-def active(filter: str):
-    if  os.name == 'nt':
-        import wmi
-        f = wmi.WMI()
-        for process in f.Win32_Process(name="python.exe"):
-            if process.CommandLine is not None and process.CommandLine.endswith(filter):
-                yield (process.ProcessId, process.Name, process.CommandLine)
+class RunnableWidget:
+    def __init__(self, runnable: Runnable, fontPath: str):
+        
+        self.darkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, Black, DarkGray), UITileForegroundStyle(fontPath, Black, DarkGray))
+        self.lightGreenTileStyle = UITileStyle(UITileBackgroundStyle(LightGreen, Black, LightGreen), UITileForegroundStyle(fontPath, Black, LightGreen))
+        self.lightYellowTileStyle = UITileStyle(UITileBackgroundStyle(LightYellow, Black, LightYellow), UITileForegroundStyle(fontPath, Black, LightYellow))
 
-def watch_processes_function(filter: str, context: RunnableContext):
-    while context.is_active():
-        context.set_list(list(active(filter)))
+        self.fileName = os.path.basename(runnable.fileName)
+        self.runnable = runnable
+        
+        self.tile = UITile(185, 120, self.fileName, "IDLE", "instances", self.darkGrayTileStyle)
+        self.runnable
+        
+    def hit(self, position):
+        return self.tile.hit(position)
 
-def has_extension(fileName, extension) :
-    return extension == os.path.splitext(fileName)[1]
+    def click(self):
+        self.tile.style = self.lightYellowTileStyle
+
+        if self.runnable.running():          
+            self.tile.text = "STOPPING"
+            self.runnable.terminate()
+        else:
+            self.tile.text = "STARTING"
+            self.runnable.run()
+
+    def update(self, results):
+        count = 0
+        for id, name, cmd in results:
+            if self.fileName in cmd:
+                count = count + 1
+
+        if count > 0:
+            self.tile.style = self.lightGreenTileStyle
+            self.tile.text = "RUNNING"
+            
+        else:
+            self.tile.style = self.darkGrayTileStyle
+            self.tile.text = "IDLE"
+
+        self.tile.footer = "instances:" + str(count)
+
+class ProcessWatcher:
+    def __init__(self, processToWatch: str = "python.exe"):
+        self.results = list()
+        self.handlers = list()
+        self.processToWatch = processToWatch
+        self.active = False
+        self.watcher_thread = threading.Thread(target=self.watch_processes_function, args=()) 
+
+    def begin(self):
+        self.active = True
+        self.watcher_thread.start()
+
+    def is_active(self):
+        return self.active
+
+    def cancel(self):
+        self.active = False
+        self.watcher_thread.join()
+
+    def scan(self):
+        if  os.name == 'nt':
+            import wmi
+            f = wmi.WMI()
+            for process in f.Win32_Process(name=self.processToWatch):
+                if process.CommandLine is not None and process.CommandLine.endswith(".py"):
+                    yield (process.ProcessId, process.Name, process.CommandLine)
+
+    def watch_processes_function(self):
+        while self.is_active():
+            self.results = list(self.scan())
+
+        for handler in self.handlers:
+            if self.is_active():
+                handler(self, self.results)
+
+def list_files(path: str, ext: str):
+    for file in listdir(path):
+        if path == __file__ :
+            continue
+        if ext != os.path.splitext(file)[1]:
+            continue
+        fileName = join(path, file)
+        if isfile(fileName):
+            yield fileName
 
 if __name__ == "__main__":
     pygame.init()
@@ -125,28 +145,19 @@ if __name__ == "__main__":
     screen.fill(pygame.Color('#000000'))
 
     current_path = os.path.dirname(os.path.abspath(__file__))
+
     font_path = join(current_path, '..', 'assets', 'fonts', 'whitrabt.ttf')
 
+    runnables = [Runnable("python", f) for f in list_files(current_path, ".py")]
+    widgets = [RunnableWidget(runnable, font_path) for runnable in runnables]
 
-    # runing_ids, running_names, runing_files = active(".py")
-    runnable_files = [f for f in listdir(current_path) if (isfile(join(current_path, f)) and current_path != __file__ and has_extension(f, ".py"))]
+    watcher = ProcessWatcher("python.exe")
+    watcher.begin()
 
-    widgets = [RunnableWidget("python", f, font_path) for f in runnable_files]
-
-    # xbox_service = Runnable('python', join(current_path, 'xbox_service.py'))
-    # xbox_service.run()
-    # xbox_service.update()
-    # xbox_service.wait()
-
+    loop = True
     columns = 4
     rows = 3
     padding = 12
-
-    watcher_context = RunnableContext()
-    watcher_thread = threading.Thread(target=watch_processes_function, args=(".py", watcher_context,))
-    watcher_thread.start()
-
-    loop = True
 
     while loop:
 
@@ -154,19 +165,17 @@ if __name__ == "__main__":
         for x in range(0, columns):
 
             index = y * columns + x
-
             if index>= len(widgets):
                 continue
 
             widget = widgets[index]
-
             widget.tile.blit(screen, 
                 (
                     padding * (x + 1) + widget.tile.surface.get_width() * x,
                     padding * (y + 1) + widget.tile.surface.get_height() * y
                 )
             )
-            widget.update(watcher_context)
+            widget.update(watcher.results)
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
@@ -176,8 +185,7 @@ if __name__ == "__main__":
 
             if event.type == pygame.QUIT or event.type == 1792:
                 print(event)
-                watcher_context.cancel()
-                watcher_thread.join()
+                watcher.cancel()
                 loop = False
         
         pygame.display.update()
