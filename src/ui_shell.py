@@ -49,7 +49,7 @@ class Runnable:
 class RunnableWidget:
     def __init__(self, runnable: Runnable, fontPath: str):
         
-        self.darkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, Black, DarkGray), UITileForegroundStyle(fontPath, Black, DarkGray))
+        self.darkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, Black, DarkGray), UITileForegroundStyle(fontPath, LightGray, LightGray))
         self.lightGreenTileStyle = UITileStyle(UITileBackgroundStyle(LightGreen, Black, LightGreen), UITileForegroundStyle(fontPath, Black, LightGreen))
         self.lightYellowTileStyle = UITileStyle(UITileBackgroundStyle(LightYellow, Black, LightYellow), UITileForegroundStyle(fontPath, Black, LightYellow))
 
@@ -72,7 +72,7 @@ class RunnableWidget:
             self.tile.text = "STARTING"
             self.runnable.run()
 
-    def update(self, results):
+    def on_change(self, sender, results):
         count = 0
         for id, name, cmd in results:
             if self.fileName in cmd:
@@ -88,10 +88,13 @@ class RunnableWidget:
 
         self.tile.footer = "instances:" + str(count)
 
+    def update(self):
+        pass
+
 class ProcessWatcher:
     def __init__(self, processToWatch: str = "python.exe"):
         self.results = list()
-        self.handlers = list()
+        self.callbacks = []
         self.processToWatch = processToWatch
         self.active = False
         self.watcher_thread = threading.Thread(target=self.watch_processes_function, args=()) 
@@ -100,12 +103,15 @@ class ProcessWatcher:
         self.active = True
         self.watcher_thread.start()
 
-    def is_active(self):
+    def isActive(self):
         return self.active
 
     def cancel(self):
         self.active = False
         self.watcher_thread.join()
+
+    def onChange(self, callback):
+        self.callbacks.append(callback)
 
     def scan(self):
         if  os.name == 'nt':
@@ -116,12 +122,10 @@ class ProcessWatcher:
                     yield (process.ProcessId, process.Name, process.CommandLine)
 
     def watch_processes_function(self):
-        while self.is_active():
+        while self.isActive():
             self.results = list(self.scan())
-
-        for handler in self.handlers:
-            if self.is_active():
-                handler(self, self.results)
+            for callbacks in self.callbacks:
+                callbacks(self, self.results)
 
 def list_files(path: str, ext: str):
     for file in listdir(path):
@@ -154,6 +158,9 @@ if __name__ == "__main__":
     watcher = ProcessWatcher("python.exe")
     watcher.begin()
 
+    for widget in widgets:
+        watcher.onChange(widget.on_change)
+
     loop = True
     columns = 4
     rows = 3
@@ -175,7 +182,7 @@ if __name__ == "__main__":
                     padding * (y + 1) + widget.tile.surface.get_height() * y
                 )
             )
-            widget.update(watcher.results)
+            widget.update()
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:

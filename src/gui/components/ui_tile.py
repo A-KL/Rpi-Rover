@@ -59,13 +59,13 @@ def pygame_ui_draw_tile(surface: Surface, caption: str, text: str, footer: str, 
     # Footer
     colors = [
         (0, style.footer_border_color), 
-        (5, style.footer_color)
+        (4, style.footer_color)
     ]
 
     for w, color in colors:
         pygame.draw.polygon(surface, color, (
-                (0 + w, body_height + footer_height / 2),
-                (0 + w, body_height + w),
+                (0 + w-1, body_height + footer_height / 2),
+                (0 + w-1, body_height + w),
                 (width - w, body_height + w),
                 (width - w, height - w),
                 (footer_height / 2, height - w)))
@@ -73,13 +73,13 @@ def pygame_ui_draw_tile(surface: Surface, caption: str, text: str, footer: str, 
     # Text
 
     font_big = pygame.font.Font(text_style.font_path, int(width / 6))
-    font_small = pygame.font.Font(text_style.font_path, int(width / 13))
+    font_small = pygame.font.Font(text_style.font_path, int(width / 11))
 
     caption_surface = font_small.render(caption, True, text_style.color)
     text_surface = font_big.render(text, True, text_style.color)
     footer_surface = font_small.render(footer, True, text_style.footer_color)
 
-    padding = caption_surface.get_height()
+    padding = caption_surface.get_height() / 2
 
     value_len = len(text)
     h, s, v, a = style.color.hsva

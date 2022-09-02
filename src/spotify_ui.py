@@ -15,10 +15,10 @@ import struct
 import numpy as np
 import time
 import sys
-import spotipy
+import spotipy2
 import datetime
 from PIL import Image
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy2.oauth import SpotifyOAuth
 
 import spotify_lib
 

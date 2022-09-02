@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     pygame.init()
     pygame.font.init()
-    pygame.mouse.set_visible(False)
+    pygame.mouse.set_visible(os.name == 'nt')
 
     root = os.path.dirname(os.path.abspath(__file__))
     screen = pygame.display.set_mode(SCREEN_SIZE)
@@ -74,29 +74,29 @@ if __name__ == "__main__":
     if not cap.isOpened():
         raise NameError('Can not open background video file.')
     
-    background_image = pygame.image.load(join(root, '..', 'assets', 'img', 'background.bmp'))
+    background_image = pygame.image.load(join(root, '..', 'assets', 'img', 'background_2.bmp'))
     background_image.convert()
     background_image.set_alpha(80)
 
     display_surface.blit(background_image, SCREEN_POSITION)
     # =============================================================
 
-    logic_v = UIStack(layout.get(2, 0), 2, manager, font_path) # 200 / 80
+    logic_v = UIStack(layout.get(0, 0), 2, manager, font_path) # 200 / 80
     logic_v.tmp_init(0, 6, 5.14, 'V', 'logic')
 
-    logic_i = UIStack(layout.get(2, 1), 2, manager, font_path)
+    logic_i = UIStack(layout.get(0, 1), 2, manager, font_path)
     logic_i.tmp_init(0, 4, 2.14, 'I', 'logic')
 
-    main_v = UIStack(layout.get(2, 2), 2, manager, font_path)
+    main_v = UIStack(layout.get(0, 2), 2, manager, font_path)
     main_v.tmp_init(0, 16, 11.01, 'V', 'main')
 
-    main_i = UIStack(layout.get(2, 3), 2, manager, font_path)
+    main_i = UIStack(layout.get(0, 3), 2, manager, font_path)
     main_i.tmp_init(0, 4, 1.04, 'I', 'main')
 
     # =============================================================
 
-    close_button = pygame_gui.elements.UIButton(layout.get(3, 3), "Close", manager)
-    show_button = pygame_gui.elements.UIButton(layout.get(3, 2), "Show", manager)
+    close_button = pygame_gui.elements.UIButton(layout.get(4, 3), "Close", manager)
+    show_button = pygame_gui.elements.UIButton(layout.get(4, 2), "Show", manager)
 
     # =============================================================
 
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         time_delta = clock.tick(60)/1000.0
         
         for event in pygame.event.get():
-            if event.type == 1792 and show_message:
+            if event.type in [1792, pygame.MOUSEBUTTONUP] and show_message:
                 show_message = False
 
             if event.type == pygame.QUIT:

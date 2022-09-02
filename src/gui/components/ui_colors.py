@@ -7,4 +7,5 @@ LightRed = Color(255, 0, 127)
 LightYellow = Color(255, 255, 0)
 
 Black = Color(0, 0, 0)
-DarkGray = Color(30, 30, 30)
+DarkGray = Color(30, 33, 35)
+LightGray = Color(110, 120, 125)
