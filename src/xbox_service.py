@@ -6,12 +6,6 @@ import config_module as config
 import modules.xbox_module as xbox
 import modules.mqtt_module as mqtt
 
-current_servos_x = 0
-current_servos_y = 0
-
-current_motors_x = 0
-current_motors_y = 0
-
 def awaitXboxJoystick():
     while True:
         try:
@@ -20,7 +14,17 @@ def awaitXboxJoystick():
             print(e)
             time.sleep(5) # sec
 
+def send(client, topic, x, y):
+    client.publish(topic, json.dumps({ "x" : x, "y": y, "source":os.path.basename(__file__)}))
+    client.publish(topic + '/x', x) 
+    client.publish(topic + '/y', y) 
+
 if __name__ == '__main__':
+    current_servos_x = 0
+    current_servos_y = 0
+    current_motors_x = 0
+    current_motors_y = 0
+
     client = mqtt.Create()
 
     print("Awaiting Xbox Controller..")
@@ -34,28 +38,30 @@ if __name__ == '__main__':
             x0, y0 = joy.leftStick()
             y0 = joy.rightTrigger() - joy.leftTrigger()
 
+            x0 = round(x0, 2)
+            y0 = round(y0, 2)
+
             x1, y1 = joy.rightStick()
-
-            x1 = - x1
-            y1 = - y1
-
-            if (y1 != current_servos_y or x1 != current_servos_x):
-                current_servos_x = x1
-                current_servos_y = y1
-                client.publish(config.steering_1_topic, json.dumps({ "x" : current_servos_x, "y": current_servos_y, "source":os.path.basename(__file__)}))
-                client.publish(config.steering_1_x_topic, current_servos_x) 
-                client.publish(config.steering_1_y_topic, current_servos_y) 
+            x1 = - round(x1, 2)
+            y1 = - round(y1, 2)
 
             if (y0 != current_motors_y or x0 != current_motors_x):
                 current_motors_x = x0
                 current_motors_y = y0
-                client.publish(config.steering_0_topic, json.dumps({ "x" : current_motors_x, "y": current_motors_y, "source":os.path.basename(__file__) }))
-                client.publish(config.steering_0_x_topic, current_motors_x) 
-                client.publish(config.steering_0_y_topic, current_motors_y) 
+                send(client, config.steering_0_topic, current_motors_x, current_motors_y)
 
-            time.sleep(0.1)
+            if (y1 != current_servos_y or x1 != current_servos_x):
+                current_servos_x = x1
+                current_servos_y = y1
+                send(client, config.steering_1_topic, current_servos_x, current_servos_y)
+
+            time.sleep(0.05)
 
     except Exception as error:
         joy.close()
+
+        send(client, config.steering_0_topic, 0, 0)
+        send(client, config.steering_1_topic, 0, 0)
+        
         client.disconnect()
         print(f"Xbox Controller disconnected: {error}")

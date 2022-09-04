@@ -39,7 +39,7 @@ def on_message(client, userdata, message):
     index = int(channel / 16)
     channel = channel % 16
 
-    print(f"Device:{index} Channel:{channel} {name}:{value}")
+    # print(f"Device:{index} Channel:{channel} {name}:{value}")
 
     # if (name == 'duty_cycle'):
     #     c = devices[index].channels[channel]

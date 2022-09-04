@@ -3,7 +3,6 @@ import sys
 import json
 
 import modules.mqtt_module as mqtt
-import modules.motor_control_module as dc_module
 
 def encode_message(x, y):
     speed = int(y * 1000)
@@ -28,9 +27,14 @@ def encode_message(x, y):
     #     print(error)
 
 if __name__ == "__main__":
+    # SC16IS750
+    #  i2c_serial = SC16IS750.SC16IS750(14745600, 0x4A)
+    #  i2c_serial.setBaudrate(9600)
+    #  i2c_serial.setUARTAttributes(EIGHTBITS,PARITY_NONE,STOPBITS_ONE)
+    #  i2c_serial.enableFifo()
 
      with serial.Serial(
-            port='/dev/ttyS0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
+            port='/dev/ttySC0', #Replace ttyS0 with ttyAM0 for Pi1,Pi2,Pi0
             baudrate = 19200,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
