@@ -1,7 +1,6 @@
-from typing import Union, Dict, Tuple
 import pygame
 
-class GridLayout:
+class UIGridLayout:
     def __init__(self, 
                 relative_rect: pygame.Rect,
                 rows : int,

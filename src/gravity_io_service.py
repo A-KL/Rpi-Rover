@@ -31,7 +31,6 @@ def print_board_status():
     print("board status: unsupport board framware version")
 
 def on_message(client, userdata, message):
-
     channel = int(message.topic.split("/")[2])
     name = str(message.topic.split("/")[3])
     value = int(message.payload.decode("utf-8"))
