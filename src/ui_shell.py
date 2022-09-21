@@ -140,7 +140,8 @@ def list_files(path: str, ext: str):
 if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
-
+    pygame.mouse.set_visible(os.name == 'nt')
+    
     SCREEN_WIDTH = 800
     SCREEN_HEIGHT = 480
     DISPLAY = (SCREEN_WIDTH,SCREEN_HEIGHT)
@@ -156,7 +157,7 @@ if __name__ == "__main__":
     widgets = [RunnableWidget(runnable, font_path) for runnable in runnables]
 
     watcher = ProcessWatcher("python.exe")
-    watcher.begin()
+    # watcher.begin()
 
     for widget in widgets:
         watcher.onChange(widget.on_change)
@@ -185,16 +186,22 @@ if __name__ == "__main__":
             widget.update()
 
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONUP:
+
+            if event.type == 1792:
+                pos = (int(event.x * SCREEN_WIDTH), int(event.y * SCREEN_HEIGHT))
                 for widget in widgets:
-                    if widget.hit(pygame.mouse.get_pos()):
+                    if widget.hit(pos):
                         widget.click()
 
-            if event.type == pygame.QUIT or event.type == 1792:
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                for widget in widgets:
+                    if widget.hit(pos):
+                        widget.click()
+
+            if event.type == pygame.QUIT:
                 print(event)
                 watcher.cancel()
                 loop = False
         
         pygame.display.update()
-    
-

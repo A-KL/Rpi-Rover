@@ -7,7 +7,7 @@ from picamera import *
 from threading import *
 from quart import *
 
-locations = ['/home/pi/projects/Rover/assets/www', '/home/pi/projects/Rover/assets/www/vendor/dist']
+locations = ['/home/pi/projects/Rpi-Rover/assets/www', '/home/pi/projects/Rpi-Rover/assets/www/vendor/dist']
 app       = Quart(__name__)
 
 class StreamingOutput(object):
@@ -36,7 +36,7 @@ async def action(file):
     if (file is None):
         return await index()
     else:
-        return await findFile(locations, file) or ""
+        return await findFile(locations, file)
     
 async def findFile(locations, file):
     for location in locations:
@@ -45,7 +45,7 @@ async def findFile(locations, file):
             return await send_file(fullPath)
         except:
             print(f"Failure!")
-    return None
+    return ""
 
 @app.websocket('/')
 async def connected():
