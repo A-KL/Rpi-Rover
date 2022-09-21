@@ -118,8 +118,8 @@ class ProcessWatcher:
             for process in f.Win32_Process(name=self.processToWatch):
                 if process.CommandLine is not None and process.CommandLine.endswith(".py"):
                     yield (process.ProcessId, process.Name, process.CommandLine)
-        if os.name == 'Linux':
-            print(subprocess.run(['ps', 'aux' , '|', 'grep', self.processToWatch], capture_output=True, text=True).stdout)
+        if os.name == 'posix':
+            subprocess.run(['ps', 'aux' , '|', 'grep', self.processToWatch], capture_output=True, text=True).stdout
 
     def watch_processes_function(self):
         while self.isActive():
