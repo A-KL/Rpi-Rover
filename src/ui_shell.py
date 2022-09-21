@@ -111,7 +111,6 @@ class ProcessWatcher:
         self.callbacks.append(callback)
 
     def scan(self):
-        print(os.name)
         if  os.name == 'nt':
             import wmi
             f = wmi.WMI()
