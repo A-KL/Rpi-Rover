@@ -1,15 +1,12 @@
-from logging import handlers
-from math import fabs
 import os
+import threading
+import subprocess
 
+from math import fabs
 from os import listdir
 from os.path import isfile, join
-import threading
-
 from gui.components.ui_tile import *
 from  gui.components.ui_colors import *
-
-import subprocess
 
 class Runnable:
     def __init__(self, shell, fileName):
@@ -49,9 +46,9 @@ class Runnable:
 class RunnableWidget:
     def __init__(self, runnable: Runnable, fontPath: str):
         
-        self.darkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, Black, DarkGray), UITileForegroundStyle(fontPath, LightGray, LightGray))
-        self.lightGreenTileStyle = UITileStyle(UITileBackgroundStyle(LightGreen, Black, LightGreen), UITileForegroundStyle(fontPath, Black, LightGreen))
-        self.lightYellowTileStyle = UITileStyle(UITileBackgroundStyle(LightYellow, Black, LightYellow), UITileForegroundStyle(fontPath, Black, LightYellow))
+        self.darkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, DarkGray, Black, DarkGray), UITileForegroundStyle(fontPath, LightGray, LightGray))
+        self.lightGreenTileStyle = UITileStyle(UITileBackgroundStyle(LightGreen, LightGreen, Black, LightGreen), UITileForegroundStyle(fontPath, Black, LightGreen))
+        self.lightYellowTileStyle = UITileStyle(UITileBackgroundStyle(LightYellow, LightYellow, Black, LightYellow), UITileForegroundStyle(fontPath, Black, LightYellow))
 
         self.fileName = os.path.basename(runnable.fileName)
         self.runnable = runnable
@@ -92,7 +89,7 @@ class RunnableWidget:
         pass
 
 class ProcessWatcher:
-    def __init__(self, processToWatch: str = "python.exe"):
+    def __init__(self, processToWatch: str = "python"):
         self.results = list()
         self.callbacks = []
         self.processToWatch = processToWatch
@@ -114,12 +111,15 @@ class ProcessWatcher:
         self.callbacks.append(callback)
 
     def scan(self):
+        print(os.name)
         if  os.name == 'nt':
             import wmi
             f = wmi.WMI()
             for process in f.Win32_Process(name=self.processToWatch):
                 if process.CommandLine is not None and process.CommandLine.endswith(".py"):
                     yield (process.ProcessId, process.Name, process.CommandLine)
+        if os.name == 'Linux':
+            print(subprocess.run(['ps', 'aux' , '|', 'grep', self.processToWatch], capture_output=True, text=True).stdout)
 
     def watch_processes_function(self):
         while self.isActive():
@@ -157,7 +157,7 @@ if __name__ == "__main__":
     widgets = [RunnableWidget(runnable, font_path) for runnable in runnables]
 
     watcher = ProcessWatcher("python.exe")
-    # watcher.begin()
+    watcher.begin()
 
     for widget in widgets:
         watcher.onChange(widget.on_change)
