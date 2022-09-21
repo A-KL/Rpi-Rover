@@ -24,15 +24,16 @@ if __name__ == "__main__":
 
     is_running = True
 
-    DarkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, Black, DarkGray), UITileForegroundStyle(font_path, Black, DarkGray))
-    LightGreenTileStyle = UITileStyle(UITileBackgroundStyle(LightGreen, Black, LightGreen), UITileForegroundStyle(font_path, Black, LightGreen))
-    LightYellowTileStyle = UITileStyle(UITileBackgroundStyle(LightYellow, Black, LightYellow), UITileForegroundStyle(font_path, Black, LightYellow))
-    LightRedTileStyle = UITileStyle(UITileBackgroundStyle(LightRed, Black, LightRed), UITileForegroundStyle(font_path, Black, LightRed))
-    SolidLightRedTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, LightRed, LightRed), UITileForegroundStyle(font_path, LightRed, Black))
+    DarkGrayTileStyle = UITileStyle(UITileBackgroundStyle(DarkGray, DarkGray, Black, DarkGray), UITileForegroundStyle(font_path, Black, DarkGray))
+    LightGreenTileStyle = UITileStyle(UITileBackgroundStyle(LightGreen, LightGreen, Black, LightGreen), UITileForegroundStyle(font_path, Black, LightGreen))
+    LightYellowTileStyle = UITileStyle(UITileBackgroundStyle(LightYellow, LightYellow, Black, LightYellow), UITileForegroundStyle(font_path, Black, LightYellow))
+    LightRedTileStyle = UITileStyle(UITileBackgroundStyle(LightRed, LightRed, Black, LightRed), UITileForegroundStyle(font_path, Black, LightRed))
+
+    InternationalOrangeTileStyle = UITileStyle(UITileBackgroundStyle(InternationalOrange, InternationalOrange, Black, InternationalOrange, 0, 3), UITileForegroundStyle(font_path, Black, InternationalOrange))
 
     tiles = [
         UITile(185, 120, "main_power", "0.95a", current_file, DarkGrayTileStyle),
-        UITile(185, 120, "12/08/2023", "1.0a", current_file, SolidLightRedTileStyle),
+        UITile(185, 120, "12/08/2023", "1.0a", current_file, InternationalOrangeTileStyle),
         UITile(185, 120, "state", "RUNNING", current_file, LightRedTileStyle),
 
         UITile(185, 120, "main_power", "0.95a", current_file, DarkGrayTileStyle),

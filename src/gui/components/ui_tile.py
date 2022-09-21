@@ -3,10 +3,13 @@ from pygame import *
 
 class UITileBackgroundStyle:
 
-    def __init__(self, color: Color, footer_color: Color, footer_border_color: Color):
+    def __init__(self, color: Color, border_color: Color, footer_color: Color, footer_border_color: Color, border_size: int = 0, footer_border_size: int = 4):
         self.color = color
+        self.border_color = border_color
+        self.border_size = border_size
         self.footer_color = footer_color
-        self.footer_border_color = footer_border_color 
+        self.footer_border_color = footer_border_color
+        self.footer_border_size = footer_border_size    
 
 class UITileForegroundStyle:
 
@@ -54,12 +57,15 @@ def pygame_ui_draw_tile(surface: Surface, caption: str, text: str, footer: str, 
     body_height = height * 0.74
     footer_height = height - body_height
 
-    pygame.draw.rect(surface, style.color, (0, 0, width, body_height))
+    if style.border_size > 0:
+        pygame.draw.rect(surface, style.border_color, (0, 0, width, body_height))
+
+    pygame.draw.rect(surface, style.color, (0+style.border_size, 0+style.border_size, width - style.border_size * 2, body_height - style.border_size * 2))
 
     # Footer
     colors = [
         (0, style.footer_border_color), 
-        (4, style.footer_color)
+        (style.footer_border_size, style.footer_color)
     ]
 
     for w, color in colors:
