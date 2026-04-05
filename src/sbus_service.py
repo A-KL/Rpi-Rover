@@ -4,11 +4,11 @@ from modules.read_sbus_from_GPIO import *
 import time
 
 if __name__ == "__main__":
-    board = DFRobot_Expansion_Board_IIC(1, 0x10)
-    board.begin()
+    # board = DFRobot_Expansion_Board_IIC(1, 0x10)
+    # board.begin()
 
-    servo = DFRobot_Expansion_Board_Servo(board)
-    servo.begin()
+    # servo = DFRobot_Expansion_Board_Servo(board)
+    # servo.begin()
 
     SBUS_PIN = 4 #pin where sbus wire is plugged in
 
