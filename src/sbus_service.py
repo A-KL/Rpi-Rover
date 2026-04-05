@@ -7,8 +7,8 @@ def arduino_map(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 if __name__ == "__main__":
-    SBUS_PIN = 4
-    SBUS_MIN = 992
+    SBUS_PIN = 16
+    SBUS_MIN = 172
     SBUS_MAX = 2000
 
     board = DFRobot_Expansion_Board_IIC(1, 0x10)
