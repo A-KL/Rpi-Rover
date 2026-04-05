@@ -3,14 +3,19 @@ from modules.read_sbus_from_GPIO import *
 
 import time
 
+def arduino_map(x, in_min, in_max, out_min, out_max):
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+
 if __name__ == "__main__":
-    # board = DFRobot_Expansion_Board_IIC(1, 0x10)
-    # board.begin()
+    SBUS_PIN = 4
+    SBUS_MIN = 992
+    SBUS_MAX = 2000
 
-    # servo = DFRobot_Expansion_Board_Servo(board)
-    # servo.begin()
+    board = DFRobot_Expansion_Board_IIC(1, 0x10)
+    board.begin()
 
-    SBUS_PIN = 4 #pin where sbus wire is plugged in
+    servo = DFRobot_Expansion_Board_Servo(board)
+    servo.begin()
 
     reader = SbusReader(SBUS_PIN)
     reader.begin_listen()
@@ -30,7 +35,12 @@ if __name__ == "__main__":
             #returns list of length 16, so -1 from channel num to get index
             channel_data = reader.translate_latest_packet()
             
-            print(f'{channel_data[0]}\t{channel_data[1]}\t{channel_data[2]}\t{channel_data[3]}\t{channel_data[4]}\t{channel_data[5]}\t{channel_data[6]}\t{channel_data[7]}\t{channel_data[8]}\t{channel_data[9]}\t{channel_data[10]}\t{channel_data[11]}\t{channel_data[12]}\t{channel_data[13]}\t{channel_data[14]}\t{channel_data[15]}')
+            for i in range(4):
+                channel_val = channel_data[i]
+                print(f"Channel {i} value: {channel_val}")
+                servo.move(i, arduino_map(channel_val, SBUS_MIN, SBUS_MAX, 0, 180))
+            
+                # print(f'{channel_data[0]}\t{channel_data[1]}\t{channel_data[2]}\t{channel_data[3]}\t{channel_data[4]}\t{channel_data[5]}\t{channel_data[6]}\t{channel_data[7]}\t{channel_data[8]}\t{channel_data[9]}\t{channel_data[10]}\t{channel_data[11]}\t{channel_data[12]}\t{channel_data[13]}\t{channel_data[14]}\t{channel_data[15]}')
             
         except KeyboardInterrupt:
             #cleanup cleanly after ctrl-c
@@ -45,10 +55,4 @@ if __name__ == "__main__":
 
     # servo.move(channel, value)
     
-    # client = mqtt.Create(config.pwm_topic, on_message)
 
-    # print("PWM HAT service ready")
-
-    # client.loop_forever()
-
-    # print("PWM HAT service stopped")    
