@@ -37,7 +37,7 @@ if __name__ == "__main__":
             
             for i in range(4):
                 channel_val = channel_data[i]
-                print(f"Channel {i} value: {channel_val}")
+                # print(f"Channel {i} value: {channel_val}")
                 servo.move(i, arduino_map(channel_val, SBUS_MIN, SBUS_MAX, 0, 180))
             
                 # print(f'{channel_data[0]}\t{channel_data[1]}\t{channel_data[2]}\t{channel_data[3]}\t{channel_data[4]}\t{channel_data[5]}\t{channel_data[6]}\t{channel_data[7]}\t{channel_data[8]}\t{channel_data[9]}\t{channel_data[10]}\t{channel_data[11]}\t{channel_data[12]}\t{channel_data[13]}\t{channel_data[14]}\t{channel_data[15]}')
