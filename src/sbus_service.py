@@ -24,17 +24,14 @@ if __name__ == "__main__":
                 print("SBUS DISCONNECTED")
                 time.sleep(.5)
                 continue
-            
+
             packet_age = reader.get_latest_packet_age() #milliseconds
 
             #returns list of length 16, so -1 from channel num to get index
             channel_data = reader.translate_latest_packet()
             
-            #
-            #Do something with data here!
-            print(f'{channel_data[0]}')
-            #
-
+            print(f'{channel_data[0]}\t{channel_data[1]}\t{channel_data[2]}\t{channel_data[3]}\t{channel_data[4]}\t{channel_data[5]}\t{channel_data[6]}\t{channel_data[7]}\t{channel_data[8]}\t{channel_data[9]}\t{channel_data[10]}\t{channel_data[11]}\t{channel_data[12]}\t{channel_data[13]}\t{channel_data[14]}\t{channel_data[15]}')
+            
         except KeyboardInterrupt:
             #cleanup cleanly after ctrl-c
             reader.end_listen()
