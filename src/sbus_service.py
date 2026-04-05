@@ -20,6 +20,11 @@ if __name__ == "__main__":
     while True:
         try:
             is_connected = reader.is_connected()
+            if not is_connected:
+                print("SBUS DISCONNECTED")
+                time.sleep(.5)
+                continue
+            
             packet_age = reader.get_latest_packet_age() #milliseconds
 
             #returns list of length 16, so -1 from channel num to get index
@@ -27,7 +32,7 @@ if __name__ == "__main__":
             
             #
             #Do something with data here!
-            #ex:print(f'{channel_data[0]}')
+            print(f'{channel_data[0]}')
             #
 
         except KeyboardInterrupt:
@@ -39,6 +44,8 @@ if __name__ == "__main__":
             reader.end_listen()
             raise
     
+    reader.end_listen()
+
     # servo.move(channel, value)
     
     # client = mqtt.Create(config.pwm_topic, on_message)
