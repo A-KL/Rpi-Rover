@@ -6,7 +6,7 @@ from math import fabs
 from os import listdir
 from os.path import isfile, join
 from gui.components.ui_tile import *
-from  gui.components.ui_colors import *
+from gui.components.ui_colors import *
 
 class Runnable:
     def __init__(self, shell, fileName):
@@ -89,7 +89,7 @@ class RunnableWidget:
         pass
 
 class ProcessWatcher:
-    def __init__(self, processToWatch: str = "python"):
+    def __init__(self, processToWatch: str = "python3"):
         self.results = list()
         self.callbacks = []
         self.processToWatch = processToWatch
@@ -152,7 +152,7 @@ if __name__ == "__main__":
 
     font_path = join(current_path, '..', 'assets', 'fonts', 'whitrabt.ttf')
 
-    runnables = [Runnable("python", f) for f in list_files(current_path, ".py")]
+    runnables = [Runnable("python3", f) for f in list_files(current_path, ".py")]
     widgets = [RunnableWidget(runnable, font_path) for runnable in runnables]
 
     watcher = ProcessWatcher("python.exe")
