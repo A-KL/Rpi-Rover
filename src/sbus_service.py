@@ -1,5 +1,6 @@
 from modules.DFRobot_RaspberryPi_Expansion_Board import *
-import modules.read_sbus_from_GPIO
+from modules.read_sbus_from_GPIO import *
+
 import time
 
 if __name__ == "__main__":
@@ -11,7 +12,7 @@ if __name__ == "__main__":
 
     SBUS_PIN = 4 #pin where sbus wire is plugged in
 
-    reader = read_sbus_from_GPIO.SbusReader(SBUS_PIN)
+    reader = SbusReader(SBUS_PIN)
     reader.begin_listen()
 
     time.sleep(.1)
